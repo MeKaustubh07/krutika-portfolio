@@ -1,0 +1,7 @@
+# source files (PDF extractions, original video) — regenerable, not needed by the site
+originals/
+
+# local tooling
+.claude/
+.DS_Store
+.vercel/

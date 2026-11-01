@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Project — Verve</title>
+  <meta name="description" content="Architectural illustration case study by Ar. Krutika M Patange — Verve.">
+  <meta name="theme-color" content="#efe9dc">
+  <script>(function(d){d.classList.add('js');if(matchMedia('(prefers-reduced-motion: reduce)').matches)d.classList.add('reduced');var h=new Date().getHours(),t=(h>=18||h<5)?'dusk':'day',p;try{t=sessionStorage.getItem('verve-theme')||t;p=sessionStorage.getItem('verve-daypart')}catch(e){}if(p!=='morning'&&p!=='noon'&&p!=='night')p=t==='dusk'?'night':(h>=5&&h<11?'morning':'noon');d.dataset.theme=p==='night'?'dusk':'day';d.dataset.daypart=p})(document.documentElement)</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Manrope:wght@300..700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/vendor/lenis.css">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/chrome.css">
+  <link rel="stylesheet" href="assets/css/project.css">
+  <link rel="stylesheet" href="assets/css/modules.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23efe9dc'/><path d='M4 24 L28 19 V28 H4Z' fill='%23663e36'/><rect x='12' y='9' width='9' height='12' fill='%23b34c48'/></svg>">
+</head>
+<body data-page="project">
+  <a class="skip label" href="#main">Skip to content</a>
+
+  <div class="preload" data-preload hidden><div class="preload__inner"><span class="preload__word">verve</span><span class="preload__count label" data-preload-count>000</span></div></div>
+  <div class="wipe" data-wipe aria-hidden="true"></div>
+  <div class="cursor" data-cursor-el aria-hidden="true"><span class="cursor__label"></span></div>
+  <header class="nav" data-nav>
+    <a class="nav__brand" href="index.html" aria-label="Verve — home">verve<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="index.html#work" class="label">Work</a><a href="index.html#about" class="label">About</a><a href="index.html#contact" class="label">Contact</a>
+    </nav>
+    <button class="nav__theme" data-theme-toggle aria-label="Switch to dusk"><span class="nav__theme-icon" aria-hidden="true"></span><span class="label nav__theme-text">Day</span></button>
+    <button class="nav__menu" data-menu-toggle aria-expanded="false" aria-controls="menu"><span class="label">Menu</span></button>
+  </header>
+  <div class="menu" id="menu" data-menu hidden> <!-- core.js fills project list from PROJECTS --> </div>
+  <div class="lb" data-lightbox hidden></div> <!-- lightbox.js builds its inner DOM -->
+
+  <main id="main" class="pj" data-project-root tabindex="-1"></main>
+
+  <noscript>
+    <div class="pj-noscript">
+      <p class="label">Verve — architectural illustration</p>
+      <p>This case study is assembled with JavaScript. <a href="index.html">Return to the portfolio</a> to browse the work.</p>
+    </div>
+  </noscript>
+
+  <script src="assets/vendor/gsap.min.js"></script>
+  <script src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script src="assets/vendor/lenis.min.js"></script>
+  <script src="assets/js/dims.js"></script>
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/lightbox.js"></script>
+  <script src="assets/js/modules/compare.js"></script>
+  <script src="assets/js/project.js"></script>
+</body>
+</html>

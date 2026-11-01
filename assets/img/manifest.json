@@ -1,0 +1,150 @@
+{
+ "cover-exploded-axo": {
+  "w": 2862,
+  "h": 4045
+ },
+ "portrait": {
+  "w": 720,
+  "h": 1280
+ },
+ "mitra-front-elevation": {
+  "w": 3534,
+  "h": 2481
+ },
+ "mitra-plan-ground": {
+  "w": 2827,
+  "h": 1985
+ },
+ "mitra-plan-first": {
+  "w": 2827,
+  "h": 1985
+ },
+ "mitra-plan-terrace": {
+  "w": 2827,
+  "h": 1985
+ },
+ "mitra-section-aa": {
+  "w": 3534,
+  "h": 2481
+ },
+ "mitra-section-bb": {
+  "w": 3534,
+  "h": 2481
+ },
+ "mitra-sectional-perspective": {
+  "w": 3473,
+  "h": 4947
+ },
+ "mitra-massing-1": {
+  "w": 1868,
+  "h": 1429
+ },
+ "mitra-massing-2": {
+  "w": 1868,
+  "h": 1429
+ },
+ "mitra-massing-3": {
+  "w": 1868,
+  "h": 1429
+ },
+ "mitra-massing-4": {
+  "w": 1868,
+  "h": 1429
+ },
+ "mitra-massing-5": {
+  "w": 1868,
+  "h": 1429
+ },
+ "mitra-massing-6": {
+  "w": 1868,
+  "h": 1429
+ },
+ "tulip-site-plan": {
+  "w": 2977,
+  "h": 4241
+ },
+ "tulip-sectional-perspective": {
+  "w": 4241,
+  "h": 2977
+ },
+ "tulip-villa-plan-ground": {
+  "w": 2827,
+  "h": 1985
+ },
+ "tulip-villa-plan-second": {
+  "w": 2827,
+  "h": 1985
+ },
+ "tulip-villa-plan-first": {
+  "w": 2827,
+  "h": 1985
+ },
+ "tulip-unit-elevation": {
+  "w": 2827,
+  "h": 1985
+ },
+ "tulip-section-aa": {
+  "w": 2827,
+  "h": 1985
+ },
+ "tulip-section-bb": {
+  "w": 2827,
+  "h": 1985
+ },
+ "tulip-clubhouse-plan-ground": {
+  "w": 2827,
+  "h": 1985
+ },
+ "tulip-clubhouse-plan-first": {
+  "w": 2827,
+  "h": 1985
+ },
+ "tulip-clubhouse-section-2": {
+  "w": 2827,
+  "h": 1985
+ },
+ "tulip-clubhouse-section-1": {
+  "w": 2827,
+  "h": 1985
+ },
+ "tulip-clubhouse-exploded": {
+  "w": 2977,
+  "h": 4241
+ },
+ "anthill-sectional-perspective": {
+  "w": 3181,
+  "h": 4871
+ },
+ "anthill-context-axo": {
+  "w": 3959,
+  "h": 2807
+ },
+ "anthill-plan-second": {
+  "w": 2980,
+  "h": 2105
+ },
+ "anthill-plan-ground": {
+  "w": 2980,
+  "h": 2105
+ },
+ "anthill-plan-first": {
+  "w": 2980,
+  "h": 2105
+ },
+ "anthill-elevation": {
+  "w": 3959,
+  "h": 2807
+ },
+ "anthill-section": {
+  "w": 3959,
+  "h": 2807
+ },
+ "anthill-brick-detail": {
+  "w": 2977,
+  "h": 2105
+ },
+ "anthill-jali-detail": {
+  "w": 2977,
+  "h": 2105
+ }
+}

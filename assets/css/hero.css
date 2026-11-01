@@ -1,0 +1,254 @@
+/* ============================================================
+   VERVE v2 — hero : the illustration in a breeze
+   hero.js lays the layers out in art-space px (1561 × 1081)
+   and frames them with one transform. Without JS the clean
+   cover image (.hero__fallback) is the hero.
+   Sky: [data-sky="morning|noon|night"] on .hero (from the site
+   daypart). Night changes the surroundings only: .hs-house keeps
+   the daylight house; .hs-facade lights the left facade openings.
+   ============================================================ */
+
+.hero {
+  --hs-top: #c9d2cb;
+  --hs-earth: #663e35;
+  --hs-fade: 1.5s;
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 560px;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(var(--hs-top) 50%, var(--hs-earth) 50%);
+}
+.hero.no-fade,
+.hero.no-fade * { transition: none !important; }
+
+/* ---------- fallback (no JS / until the layers decode) ---------- */
+
+.hero__fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: 68% 40%;
+  transition: opacity .9s var(--ease-io);
+}
+.hero__fallback.is-framed {
+  inset: auto;
+  left: 0;
+  top: 0;
+  object-fit: fill;
+  transform-origin: 0 0;
+}
+.hero.is-live .hero__fallback { opacity: 0; visibility: hidden; transition: opacity .9s var(--ease-io), visibility 0s .9s; }
+
+/* ---------- stage ---------- */
+
+.hero__stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity .9s var(--ease-io);
+  pointer-events: none;
+}
+.hero.is-live .hero__stage { opacity: 1; }
+.hero.is-failed .hero__stage { display: none; }
+
+.hs-world {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1561px;
+  height: 1081px;
+  transform-origin: 0 0;
+}
+.hs-world div,
+.hs-world i,
+.hs-world img { position: absolute; }
+.hs-world img {
+  display: block;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.hs-sky, .hs-clouds, .hs-land, .hs-trees, .hs-scene, .hs-glow, .hs-night, .hs-fill { inset: 0; }
+.hero__ui { display: none; }
+
+/* pause everything off-screen / hidden tab / before the reveal */
+.hero.is-paused .hs-world,
+.hero.is-paused .hs-world * { animation-play-state: paused !important; }
+
+/* ---------- sky : three plates, noon at the base ---------- */
+
+.hs-sky-ext {
+  left: -8px;
+  right: -8px;
+  bottom: 100%;
+  height: 4000px;
+  background: var(--hs-top);
+  transition: background-color var(--hs-fade) var(--ease-io);
+}
+.hs-sky-img { opacity: 0; transition: opacity var(--hs-fade) var(--ease-io); }
+/* sky extended above the plate (portrait): melt the plate's top edge into the flat sky */
+.hero.is-ext .hs-sky-img {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 220px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 220px);
+}
+.hero.is-ext:not([data-sky="noon"]) .hs-sky--noon { opacity: 0; }   /* else it leaks through the masked edge */
+.hs-world .hs-sky--noon,
+.hero[data-sky="morning"] .hs-sky--morning,
+.hero[data-sky="night"] .hs-sky--night { opacity: 1; }
+
+.hs-night { opacity: 0; transition: opacity var(--hs-fade) var(--ease-io); }
+.hero[data-sky="night"] .hs-night { opacity: 1; }
+.hs-stars {
+  position: absolute;
+  left: 0;
+  top: -1380px;
+  width: 1561px;
+  height: 1900px;
+  fill: #fff3da;
+}
+.hs-stars--0 { opacity: .75; }
+.hs-stars--1 { opacity: .55; }
+.hs-stars--2 { opacity: .4; }
+.hero[data-sky="night"]:not(.is-still) .hs-stars--1 { animation: hs-twinkle 4.6s ease-in-out infinite alternate; }
+.hero[data-sky="night"]:not(.is-still) .hs-stars--2 { animation: hs-twinkle 6.2s ease-in-out -2s infinite alternate; }
+@keyframes hs-twinkle { from { opacity: .15; } to { opacity: .7; } }
+.hs-moon svg { display: block; width: 100%; height: 100%; }
+
+/* ---------- clouds / land ---------- */
+
+.hs-clouds,
+.hs-land { transition: filter var(--hs-fade) var(--ease-io), opacity var(--hs-fade) var(--ease-io); }
+.hero[data-sky="morning"] .hs-clouds { filter: sepia(.35) saturate(1.5) brightness(1.02); }
+.hero[data-sky="night"] .hs-clouds { filter: brightness(.5) saturate(.6); opacity: .6; }
+.hero[data-sky="morning"] .hs-land { filter: saturate(1.06) sepia(.1) brightness(1.02); }
+.hero[data-sky="night"] .hs-land { filter: brightness(.5) saturate(.7) contrast(1.06); }
+.hs-folk { filter: none !important; }
+.hs-person { transition: filter var(--hs-fade) var(--ease-io); will-change: filter; }   /* same raster path in every sky */
+.hero[data-sky="morning"] .hs-folk .hs-person { filter: saturate(1.06) sepia(.1) brightness(1.02); }
+.hero[data-sky="night"] .hs-folk .hs-person:not(.is-in) { filter: brightness(.4) saturate(.6) contrast(1.06); }
+
+.hs-earth-ext {
+  left: -8px;
+  right: -8px;
+  top: calc(100% - 2px);
+  height: 4000px;
+  background: var(--hs-earth);
+}
+/* art cropped at the top edge: soften when the sky is extended above it
+   (half-clouds cut by the frame would read as a band: drop them) */
+.hero.is-ext .hs-cloud.hs-cut { display: none; }
+.hero.is-ext .hs-cut {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 46px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 46px);
+}
+
+/* ---------- light : morning warmth, night haze ---------- */
+
+.hs-tint {
+  left: -8px;
+  right: -8px;
+  top: -4000px;
+  height: 9081px;
+  pointer-events: none;
+}
+.hs-tint::before,
+.hs-tint::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--hs-fade) var(--ease-io);
+}
+.hs-tint::before {
+  background: linear-gradient(90deg, rgba(255, 186, 104, .2), rgba(255, 210, 150, .08) 42%, rgba(255, 226, 190, 0) 72%);
+}
+.hs-tint::after {
+  background: linear-gradient(rgba(22, 28, 74, 0) 0, rgba(22, 28, 74, 0) 4250px, rgba(22, 28, 74, .3) 4560px);
+}
+.hero[data-sky="morning"] .hs-tint::before,
+.hero[data-sky="night"] .hs-tint::after { opacity: 1; }
+
+/* ---------- house : the daylight house in every sky ---------- */
+
+.hs-house { transition: filter var(--hs-fade) var(--ease-io); }
+.hero[data-sky="morning"] .hs-house { filter: saturate(1.06) sepia(.1) brightness(1.02); }
+.hs-house::after {                                   /* the morning tint, clipped to the house */
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 186, 104, .2), rgba(255, 210, 150, .08) 42%, rgba(255, 226, 190, 0) 72%) -660px 0 / 1577px 100% no-repeat;
+  -webkit-mask: url("../img/hero/house.webp") 0 0 / 100% 100% no-repeat;
+  mask: url("../img/hero/house.webp") 0 0 / 100% 100% no-repeat;
+  opacity: 0;
+  transition: opacity var(--hs-fade) var(--ease-io);
+}
+.hero[data-sky="morning"] .hs-house::after { opacity: 1; }
+
+/* ---------- night : warm light in the left facade openings only ---------- */
+
+.hs-glow {
+  opacity: 0;
+  transition: opacity var(--hs-fade) var(--ease-io);
+}
+.hero[data-sky="night"] .hs-glow { opacity: 1; }
+.hs-flick {
+  display: block;
+  border-radius: 2px;
+  background: radial-gradient(closest-side, rgba(255, 214, 140, .9), rgba(255, 180, 96, .35) 70%, rgba(255, 170, 80, 0));
+  mix-blend-mode: screen;
+  opacity: .12;
+}
+.hero[data-sky="night"]:not(.is-still) .hs-flick { animation: hs-flick 5.4s steps(1, end) var(--d, 0s) infinite; }
+@keyframes hs-flick { 0% { opacity: .12; } 18% { opacity: .22; } 22% { opacity: .06; } 26% { opacity: .18; } 55% { opacity: .1; } 80% { opacity: .2; } }
+
+/* ---------- hero scroll cue (small mouse, dot slides down) ---------- */
+
+.scroll-cue {
+  position: absolute;
+  right: clamp(1rem, 3vw, 2.5rem);
+  bottom: clamp(1rem, 3vh, 2rem);
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  width: 2.6rem; height: 2.6rem;
+  border-radius: 50%;
+  color: var(--earth-ink);
+  background: color-mix(in srgb, var(--earth) 55%, transparent);
+  backdrop-filter: blur(4px);
+  transition: transform var(--dur-1) var(--ease-out), background-color var(--dur-1);
+}
+.scroll-cue:hover { transform: translateY(2px); background: var(--earth); }
+.scroll-cue__mouse {
+  position: relative;
+  width: 13px; height: 20px;
+  border: 1.4px solid currentColor;
+  border-radius: 7px;
+}
+.scroll-cue__mouse i {
+  position: absolute;
+  left: 50%; top: 4px;
+  width: 2px; height: 4px;
+  margin-left: -1px;
+  border-radius: 1px;
+  background: currentColor;
+  animation: cue-dot 1.8s var(--ease-io) infinite;
+}
+@keyframes cue-dot {
+  0%   { transform: translateY(0); opacity: 0; }
+  25%  { opacity: 1; }
+  70%  { transform: translateY(7px); opacity: 0; }
+  100% { transform: translateY(7px); opacity: 0; }
+}
+.reduced .scroll-cue__mouse i { animation: none; opacity: 1; }

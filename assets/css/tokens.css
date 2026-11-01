@@ -1,0 +1,91 @@
+/* ============================================================
+   VERVE v2 — design tokens
+   Palette sampled from the cover illustration: sage sky, the
+   terracotta house, earth-brown poché, paper interiors.
+   Day is the default; Dusk mirrors the hero at nightfall.
+   ============================================================ */
+
+:root {
+  /* surfaces */
+  --paper:     #efe9dc;
+  --paper-2:   #e5dccb;
+  --paper-3:   #f7f3ea;
+  /* text */
+  --ink:       #2b231f;
+  --ink-2:     #5c4f46;
+  --ink-3:     #8b7e72;
+  --line:      rgba(43, 35, 31, .17);
+  --line-soft: rgba(43, 35, 31, .08);
+  /* illustration colours */
+  --terra:     #b34c48;
+  --terra-2:   #8e3631;
+  --earth:     #663e36;
+  --earth-ink: #f1e6d8;
+  --earth-ink-2: #c9b3a2;
+  --sage:      #c0ccc3;
+  --leaf:      #6f8b5b;
+  --glow:      #f3b765;
+  --accent:    var(--terra);
+  --shadow:    0 30px 60px -36px rgba(60, 38, 30, .45);
+  --sheet:     #f8f5ee;
+
+  /* type */
+  --f-display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --f-sans:    "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  --t-hero:  clamp(5.5rem, 21vw, 22rem);
+  --t-xl:    clamp(3rem, 8.4vw, 8rem);
+  --t-lg:    clamp(2.2rem, 5.2vw, 4.8rem);
+  --t-md:    clamp(1.45rem, 2.6vw, 2.35rem);
+  --t-body:  clamp(1rem, .92rem + .3vw, 1.14rem);
+  --t-small: .875rem;
+  --t-label: .68rem;
+
+  /* space */
+  --pad:     clamp(1.15rem, 4vw, 4.5rem);
+  --gap:     clamp(1rem, 2vw, 2rem);
+  --section: clamp(6rem, 13vw, 12rem);
+  --maxw:    1640px;
+  --nav-h:   72px;
+
+  /* motion */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-io:  cubic-bezier(.65, 0, .35, 1);
+  --dur-1: .35s;
+  --dur-2: .7s;
+  --dur-3: 1.2s;
+
+  /* layers */
+  --z-nav: 100;
+  --z-menu: 140;
+  --z-lightbox: 200;
+  --z-cursor: 300;
+  --z-wipe: 400;
+  --z-preload: 500;
+
+  color-scheme: light;
+}
+
+html[data-theme="dusk"] {
+  --paper:     #1c1a21;
+  --paper-2:   #24212b;
+  --paper-3:   #2c2833;
+  --ink:       #efe7da;
+  --ink-2:     #bdb2a4;
+  --ink-3:     #887d72;
+  --line:      rgba(239, 231, 218, .15);
+  --line-soft: rgba(239, 231, 218, .07);
+  --terra:     #d8695a;
+  --terra-2:   #b34c48;
+  --earth:     #3b2420;
+  --earth-ink: #f1e6d8;
+  --earth-ink-2: #b99f8d;
+  --sage:      #3d4a55;
+  --leaf:      #8fa67a;
+  --glow:      #ffbf6b;
+  --shadow:    0 30px 70px -34px rgba(0, 0, 0, .8);
+  --sheet:     #f1ece2;
+
+  color-scheme: dark;
+}

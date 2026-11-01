@@ -1,0 +1,157 @@
+/* ============================================================
+   VERVE v2 — base : reset, type, layout primitives, utilities
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-sans);
+  font-size: var(--t-body);
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+  transition: background-color var(--dur-3) var(--ease-io), color var(--dur-3) var(--ease-io);
+}
+body.is-locked { overflow: hidden; }
+
+img, video, canvas, svg { display: block; max-width: 100%; }
+img { height: auto; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p, figure, dl, dd, ul, ol { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+
+::selection { background: var(--terra); color: var(--paper-3); }
+:focus-visible { outline: 1.5px solid var(--terra); outline-offset: 4px; border-radius: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- type ---------- */
+
+.display {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 50, "WONK" 0;
+  letter-spacing: -.025em;
+  line-height: .95;
+}
+.display em, .display i {
+  font-style: italic;
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+  color: var(--accent);
+}
+
+.t-xl { font-size: var(--t-xl); }
+.t-lg { font-size: var(--t-lg); }
+.t-md { font-size: var(--t-md); line-height: 1.15; }
+
+.label {
+  font-family: var(--f-mono);
+  font-size: var(--t-label);
+  font-weight: 400;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+.num {
+  font-family: var(--f-mono);
+  font-size: var(--t-label);
+  letter-spacing: .08em;
+  color: var(--accent);
+  font-feature-settings: "tnum";
+}
+
+.lede {
+  font-family: var(--f-display);
+  font-size: var(--t-md);
+  font-weight: 300;
+  line-height: 1.3;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+.body { color: var(--ink-2); max-width: 64ch; }
+.body p + p { margin-top: 1.1em; }
+.body strong { color: var(--ink); font-weight: 600; }
+
+/* ---------- layout ---------- */
+
+.wrap {
+  width: 100%;
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding-inline: var(--pad);
+}
+
+.grid-12 {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gap);
+}
+
+.rule { border: 0; height: 1px; background: var(--line); margin: 0; }
+
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* ---------- small components ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .7em;
+  padding: .95em 1.6em;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-family: var(--f-mono);
+  font-size: var(--t-label);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  transition: background-color var(--dur-1), color var(--dur-1), border-color var(--dur-1);
+}
+.btn:hover { background: var(--ink); color: var(--paper); }
+
+.link-u {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size var(--dur-2) var(--ease-out);
+}
+.link-u:hover { background-size: 100% 1px; }
+
+.tag {
+  display: inline-block;
+  padding: .3em .75em;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--f-mono);
+  font-size: .62rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+
+/* reveal initial states (core.js animates them; no-JS keeps them visible) */
+.js [data-reveal="up"], .js [data-reveal=""] { opacity: 0; transform: translateY(40px); }
+.js [data-reveal="fade"] { opacity: 0; }
+.js [data-reveal="clip"] { clip-path: inset(100% 0 0 0); }
+.js [data-reveal="words"], .js [data-reveal="lines"] { visibility: hidden; }
+.reduced [data-reveal] { opacity: 1 !important; transform: none !important; clip-path: none !important; visibility: visible !important; }
