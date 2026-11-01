@@ -33,13 +33,13 @@
 
   /* ---------- drawing index (lightbox order = page order) ---------- */
 
-  const ITEMS = [];
-  const INDEX = {};
+  const ITEMS = [], INDEX = {};
   const add = (it) => {
     if (!it || !it.src || INDEX[it.src] != null) return;
     INDEX[it.src] = ITEMS.length;
     ITEMS.push({ src: it.src, title: it.title || "", note: it.note || "" });
   };
+  { const d = P.blocks.find((b) => b.type === "feature" && b.item.src === (P.banner || P.cover)); if (d) { add(d.item); P.blocks = P.blocks.filter((b) => b !== d); } }   /* banner isn't repeated in the body */
   P.blocks.forEach((b) => {
     if (b.type === "feature") add(b.item);
     if (b.items && /grid|tabs|seq|strip/.test(b.type)) b.items.forEach(add);
@@ -365,7 +365,7 @@
 
       if (!HAS_GSAP || reduced()) return;
       gsap.matchMedia().add("(min-width: 900px)", () => {
-        wrap.classList.add("is-pinned");
+        wrap.classList.add("is-pinned"); vp.removeAttribute("tabindex");   /* sheets are tab stops; the pin drives the scroll */
         vp.scrollLeft = 0;
         const dist = () => Math.max(0, track.scrollWidth - vp.clientWidth);
         const tw = gsap.to(track, {
@@ -375,7 +375,7 @@
             invalidateOnRefresh: true, anticipatePin: 1, onUpdate: (st) => show(st.progress)
           }
         });
-        return () => { tw.scrollTrigger && tw.scrollTrigger.kill(); tw.kill(); gsap.set(track, { x: 0 }); wrap.classList.remove("is-pinned"); show(0); };
+        return () => { tw.scrollTrigger && tw.scrollTrigger.kill(); tw.kill(); gsap.set(track, { x: 0 }); wrap.classList.remove("is-pinned"); vp.tabIndex = 0; show(0); };
       });
       /* keyboard: focus inside the pinned viewport scrolls the page to that sheet */
       $$(".sheet", track).forEach((s, i) => s.addEventListener("focus", () => {

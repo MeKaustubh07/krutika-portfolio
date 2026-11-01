@@ -13,7 +13,7 @@
   /* text */
   --ink:       #2b231f;
   --ink-2:     #5c4f46;
-  --ink-3:     #8b7e72;
+  --ink-3:     #6a5e54;
   --line:      rgba(43, 35, 31, .17);
   --line-soft: rgba(43, 35, 31, .08);
   /* illustration colours */
@@ -73,7 +73,7 @@ html[data-theme="dusk"] {
   --paper-3:   #2c2833;
   --ink:       #efe7da;
   --ink-2:     #bdb2a4;
-  --ink-3:     #887d72;
+  --ink-3:     #9d9185;
   --line:      rgba(239, 231, 218, .15);
   --line-soft: rgba(239, 231, 218, .07);
   --terra:     #d8695a;

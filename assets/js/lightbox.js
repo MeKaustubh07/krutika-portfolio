@@ -396,7 +396,13 @@
     if ("ResizeObserver" in window) new ResizeObserver(fill).observe(track);
     el.addEventListener("pointerenter", () => (m.hover = 0));
     el.addEventListener("pointerleave", () => (m.hover = 1));
-    el.addEventListener("focusin", () => (m.hover = 0));
+    el.addEventListener("focusin", (e) => {   // hold the marquee with the focused sheet in view (overflow-x: clip can't scroll to it)
+      m.hover = 0; m.k = 0;
+      const t = m.tracks.find((tr) => tr.contains(e.target));
+      if (!t || !m.w) return;
+      const o = e.target.getBoundingClientRect().left - t.getBoundingClientRect().left, iw = e.target.offsetWidth;
+      m.x = Math.max(-m.w + 1, Math.min(0, Math.max(0, (el.offsetWidth - iw) / 2) - o));
+    });
     el.addEventListener("focusout", () => (m.hover = 1));
     new IntersectionObserver((es) => (m.on = es[0].isIntersecting)).observe(el);
     marquees.push(m);

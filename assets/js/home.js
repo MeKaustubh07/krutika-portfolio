@@ -110,7 +110,7 @@
     if (!(window.gsap && window.ScrollTrigger) || isReduced()) return;
     const { gsap, ScrollTrigger } = window;
     gsap.registerPlugin(ScrollTrigger);
-    gsap.matchMedia().add("(min-width: 900px) and (min-height: 620px)", () => {
+    gsap.matchMedia().add("(min-width: 1px)", () => {   /* desktop and phones */
       const panels = $$(".wpanel");
       panels.forEach((p, i) => {
         const next = panels[i + 1];
@@ -234,7 +234,7 @@
   const PEOPLE = [
     { s: "p-mother", dx: 120, dur: 46, flip: 1 }, { s: "p-dhoti", dx: 70, dur: 40 },
     { s: "p-umbrella", dx: -110, dur: 42, flip: 1 }, { s: "p-girl" },
-    { s: "p-cyclist", dx: 150, dur: 60, flip: 1 }, { s: "p-sari" }
+    { s: "p-cyclist", dx: -150, dur: 60, flip: 1 }, { s: "p-sari" }
   ];
 
   const seeded = (a) => () => {

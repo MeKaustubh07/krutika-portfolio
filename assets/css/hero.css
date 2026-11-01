@@ -252,3 +252,9 @@
   100% { transform: translateY(7px); opacity: 0; }
 }
 .reduced .scroll-cue__mouse i { animation: none; opacity: 1; }
+
+/* portrait / narrow screens: show the WHOLE illustration (fit width) with a band of
+   sky above for the nav, instead of a full-height zoomed crop */
+@media (max-aspect-ratio: 5/4) {
+  .hero { height: auto; min-height: 0; aspect-ratio: 1561 / 1300; }
+}

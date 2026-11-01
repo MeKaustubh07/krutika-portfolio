@@ -22,7 +22,8 @@
               cross-section interiors never glow. dusk.windowGlow = the
               opening rects (a couple flicker softly).
    ground / groundRight / lane: walkable surface polylines.
-   stickers:  the other people cut out of scene (idle sway about feet px,py).
+   stickers:  the other people cut out of scene (idle sway about feet px,py);
+              street = stands outside the house (gets the night tint).
    skies:     morning / noon / night sky plates (same grain, tinted).
    ============================================================ */
 (function () {
@@ -89,7 +90,7 @@
    "groundRight": [[1440, 804], [1561, 792]],
    "lane": [[480, 760], [652, 798]],
    "stickers": [
-    {"id": "sari", "src": "assets/img/hero/stickers/sari.webp", "x": 785, "y": 737, "w": 43, "h": 124, "px": 806, "py": 858, "amp": 1.6, "period": 6.5},
+    {"id": "sari", "src": "assets/img/hero/stickers/sari.webp", "x": 785, "y": 737, "w": 43, "h": 124, "px": 806, "py": 858, "amp": 1.6, "period": 6.5, "street": true},
     {"id": "stair", "src": "assets/img/hero/stickers/stair.webp", "x": 1367, "y": 573, "w": 41, "h": 106, "px": 1390, "py": 676, "amp": 1.1, "period": 7.5},
     {"id": "girl", "src": "assets/img/hero/stickers/girl.webp", "x": 1104, "y": 722, "w": 31, "h": 69, "px": 1120, "py": 788, "amp": 1.3, "period": 5.5}
    ],

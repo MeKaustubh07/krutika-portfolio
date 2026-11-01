@@ -17,7 +17,8 @@
   display: flex; align-items: baseline; gap: 1rem;
   margin-bottom: clamp(2.5rem, 5vw, 4.5rem);
 }
-.sec-head__no { font-size: .72rem; color: var(--terra); flex: none; }
+.sec-head__no { font-size: .72rem; color: color-mix(in srgb, var(--terra) 78%, var(--ink)); flex: none; }   /* AA at label size */
+.caps .num { color: color-mix(in srgb, var(--terra) 78%, var(--ink)); }
 .sec-head__rule { flex: 1; height: 1px; background: var(--line); align-self: center; }
 .sec-head__title {
   order: -1; flex: none;
@@ -159,6 +160,13 @@
 @media (max-width: 480px) {
   .wpanel__stamp { right: .5rem; top: .5rem; padding: .32rem .55rem .32rem .45rem; }
   .wpanel__foot { gap: .9rem; }
+}
+
+
+/* phones / tablets: the same sticky stacking, tighter offsets */
+@media (max-width: 899px), (max-height: 619px) {
+  .wpanel { --stack: 10px; position: sticky; top: calc(var(--nav-h) + .5rem + var(--i) * var(--stack)); margin-bottom: 1.5rem; }
+  .wpanel__card { background: var(--paper-3); will-change: transform; }
 }
 
 /* ---------- drawings (marquee) ---------- */

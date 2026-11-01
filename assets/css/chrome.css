@@ -211,7 +211,7 @@ html.has-cursor :is(input, textarea, select, [contenteditable="true"]) { cursor:
   border-radius: 999px;
   transition: border-color .35s, background-color .35s, color .35s; }
 .nav__theme:hover, .nav__menu:hover, .menu__theme:hover { border-color: currentColor; }
-.nav__theme-text { min-width: 4.4em; }
+.nav__theme-text { min-width: 5.5em; }
 .nav__menu::after {
   content: "";
   width: 7px; height: 7px;

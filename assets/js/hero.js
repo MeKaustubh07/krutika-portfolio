@@ -160,7 +160,7 @@
   (L.stickers || []).forEach((p) => {
     const o = `${px(p.px - p.x)} ${px(p.py - p.y)}`;
     const Hs = L.house;                                    // people in / at the house stay in its daylight
-    const inside = Hs && p.px > Hs.x && p.px < Hs.x + Hs.w && p.py < Hs.y + Hs.h;
+    const inside = Hs && !p.street && p.px > Hs.x && p.px < Hs.x + Hs.w && p.py < Hs.y + Hs.h;
     const n = box(el("div", `hs-person${inside ? " is-in" : ""}`, folk), p);
     const id = el("div", "hs-fill", n);
     pic(id, p.src, true);
@@ -227,8 +227,10 @@
     const Wv = hero.clientWidth, Hv = hero.clientHeight;
     if (!Wv || !Hv) return;
     const fw = F.focus[1] - F.focus[0];
-    let s = (Wv + 1) / AW;
-    if (Hv / s > AH) { s = Hv / AH; if (Wv / s < fw) s = Wv / fw; }   // taller: crop sides, then extend sky/earth
+    /* always fit the full width so the whole illustration shows (portrait screens get
+       extra sky above instead of a zoomed crop — hero.css sizes the hero to the art) */
+    const s = (Wv + 1) / AW;
+    void fw;
     const visW = Wv / s, visH = Hv / s;
     const X = visW < AW ? clamp((F.focus[0] + F.focus[1]) / 2 - visW / 2, 0, AW - visW) : 0;
     let T;

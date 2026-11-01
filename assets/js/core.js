@@ -23,8 +23,7 @@
   V.img = (tier, slug) => `assets/img/${tier}/${slug}.jpg`;
   V.dim = (slug) => (window.DIMS && window.DIMS[slug]) || [1600, 1100];
 
-  const nav = $("[data-nav]"), wipe = $("[data-wipe]"), menu = $("[data-menu]");
-  const menuBtn = $("[data-menu-toggle]");
+  const nav = $("[data-nav]"), wipe = $("[data-wipe]"), menu = $("[data-menu]"), menuBtn = $("[data-menu-toggle]");
 
   /* ---------- smooth scroll (Lenis + ScrollTrigger) ---------- */
 
@@ -313,7 +312,7 @@
         <span class="menu__no num">${p.no}</span><span class="menu__name">${p.name}</span><span class="menu__meta label">${p.practice}</span></a></li>`).join("");
     const pages = [["index.html", "Home"], ["index.html#work", "Work"], ["index.html#about", "About"], ["index.html#contact", "Contact"]]
       .map(([h, t], i) => `<li style="--i:${i + 1}"><a class="menu__page" href="${h}">${t}</a></li>`).join("");
-    [["role", "dialog"], ["aria-label", "Site menu"]].forEach(([k, v]) => menu.setAttribute(k, v));
+    [["role", "dialog"], ["aria-modal", "true"], ["aria-label", "Site menu"]].forEach(([k, v]) => menu.setAttribute(k, v));
     menu.innerHTML = `<div class="menu__bg" aria-hidden="true"></div>
       <div class="menu__inner">
         <div class="menu__work"><p class="menu__kicker label">Selected work — ${String(P.length).padStart(2, "0")}</p><ol class="menu__list">${work}</ol></div>
@@ -322,7 +321,6 @@
             <button class="menu__theme" type="button" data-theme-toggle><span class="nav__theme-icon" aria-hidden="true"></span><span class="label nav__theme-text">Day</span></button>
             ${H.email ? `<a class="menu__mail link-u" href="mailto:${H.email}">${H.email}</a>` : ""}
             ${H.instagram ? `<a class="label menu__ig" href="https://instagram.com/${H.instagram}" target="_blank" rel="noopener">Instagram — @${H.instagram}</a>` : ""}
-            <p class="label menu__hint">Press <kbd>T</kbd> for day / dusk</p>
           </div></div>
       </div>`;
     menu.addEventListener("click", (e) => { if (!e.target.closest("a, button, .menu__list li")) closeMenu(); });
@@ -374,7 +372,7 @@
   addEventListener("pagehide", () => clearTimeout(wipeSafety));
   addEventListener("pageshow", (e) => {
     if (!e.persisted) return;
-    clearTimeout(wipeSafety); closeMenu(false);
+    clearTimeout(wipeSafety); closeMenu(false); applyPart(picked() || byClock(), false);
     if (wipe) wipe.dataset.state = "gone";
   });
 
@@ -395,6 +393,7 @@
       e.preventDefault();
       closeMenu(false);
       scrollTo(t);
+      if (t && t.nodeType === 1) { if (!t.matches("a[href], button, input, select, textarea, [tabindex]")) t.setAttribute("tabindex", "-1"); t.focus({ preventScroll: true }); }
       try { history.replaceState(null, "", url.hash || location.pathname + location.search); } catch (err) { /* file:// */ }
       return;
     }
@@ -484,6 +483,7 @@
       sweepSoon();
     });
     V.ready(onReady);
+    doc.addEventListener("focusin", (e) => { const r = e.target.closest && e.target.closest("[data-reveal]"); if (!r) return; if (r.__rv === 1) play(r); if (hasGsap) gsap.getTweensOf(r).forEach((t) => t.progress(1)); });   /* focused ⇒ shown now */
     const pre = $("[data-preload]");
     if (pre && body.dataset.page === "home" && !reduced && !seen()) runPreloader(pre);
     else settle(reduced ? 600 : 2000).then(() => { fireReady(); wipeIn(); });
