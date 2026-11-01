@@ -133,7 +133,6 @@
   background: rgba(248, 245, 238, .88); color: #3a302a;
   border: 1px solid rgba(43, 35, 31, .14);
 }
-.wpanel__stamp .glyph-north { width: 14px; color: #3a302a; }
 
 /* desktop: sticky stacking cards */
 @media (min-width: 900px) and (min-height: 620px) {

@@ -24,7 +24,6 @@
 
   /* ---------- work : stacking project cards ---------- */
 
-  const NORTH = `<svg class="glyph-north" viewBox="0 0 24 34" aria-hidden="true"><circle cx="12" cy="21" r="10"/><path d="M12 8 L16.5 27 L12 23 L7.5 27Z"/><path d="M9.5 1.5 V6.5 L14.5 1.5 V6.5"/></svg>`;
   const SCALE = `<svg class="glyph-scale" viewBox="0 0 84 12" aria-hidden="true"><path d="M1 2 V10 H83 V2 M21.5 6 V10 M42 2 V10 M62.5 6 V10"/><path class="fill" d="M1 7 H21.5 V10 H1Z M42 7 H62.5 V10 H42Z"/></svg>`;
 
   function panel(p, i, n) {
@@ -62,7 +61,7 @@
           </div>
           <span class="wpanel__tick wpanel__tick--tl" aria-hidden="true"></span>
           <span class="wpanel__tick wpanel__tick--br" aria-hidden="true"></span>
-          <span class="wpanel__stamp label" aria-hidden="true">${NORTH}<span>Sheet ${p.no}</span></span>
+          <span class="wpanel__stamp label" aria-hidden="true"><span>Sheet ${p.no}</span></span>
         </div>
         <span class="wpanel__shade" aria-hidden="true"></span>
       </a>
