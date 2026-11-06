@@ -15,13 +15,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Manrope:wght@300..700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/vendor/lenis.css?v=20261102b">
-<link rel="stylesheet" href="assets/css/tokens.css?v=20261102b">
-<link rel="stylesheet" href="assets/css/base.css?v=20261102b">
-<link rel="stylesheet" href="assets/css/chrome.css?v=20261102b">
-<link rel="stylesheet" href="assets/css/home.css?v=20261102b">
-<link rel="stylesheet" href="assets/css/hero.css?v=20261102b">
-<link rel="stylesheet" href="assets/css/modules.css?v=20261102b">
+<link rel="stylesheet" href="assets/vendor/lenis.css?v=20261106b">
+<link rel="stylesheet" href="assets/css/tokens.css?v=20261106b">
+<link rel="stylesheet" href="assets/css/base.css?v=20261106b">
+<link rel="stylesheet" href="assets/css/chrome.css?v=20261106b">
+<link rel="stylesheet" href="assets/css/home.css?v=20261106b">
+<link rel="stylesheet" href="assets/css/hero.css?v=20261106b">
+<link rel="stylesheet" href="assets/css/modules.css?v=20261106b">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23efe9dc'/><path d='M4 24 L28 19 V28 H4Z' fill='%23663e36'/><rect x='12' y='9' width='9' height='12' fill='%23b34c48'/></svg>">
 </head>
 <body data-page="home">
@@ -91,7 +91,7 @@
     <div class="about__grid">
       <figure class="about__portrait" data-reveal="clip">
         <div class="about__portrait-frame">
-          <img src="assets/img/web/portrait.jpg" width="720" height="1280" alt="Portrait of Krutika M Patange" loading="lazy" decoding="async">
+          <img src="assets/img/web/portrait-crop.jpg" srcset="assets/img/thumb/portrait-crop.jpg 420w, assets/img/web/portrait-crop.jpg 900w" sizes="(max-width: 600px) 46vw, (max-width: 1023px) 46vw, 480px" width="900" height="1020" alt="Portrait of Krutika M Patange" loading="lazy" decoding="async">
         </div>
         <figcaption class="about__caption">
           <span class="label">Ar. Krutika M Patange</span>
@@ -113,11 +113,10 @@
         <h3 class="label about__list-h">Practices</h3>
         <ul class="practices" data-about-practices></ul>
       </div>
-      <div class="artefact" aria-hidden="true">
-        <div class="artefact__float" data-parallax="-0.12">
-          <img src="assets/img/web/cover-exploded-axo.png" width="1061" height="1500" alt="" loading="lazy" decoding="async">
-        </div>
-      </div>
+      <figure class="axo" data-axo aria-hidden="true"> <!-- about-axo.js draws an exploded axonometric that assembles as you scroll -->
+        <svg class="axo__svg" viewBox="-162 -248 324 444" focusable="false"></svg>
+        <figcaption class="label axo__cap">Fig. 03 — Exploded axonometric</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -148,16 +147,18 @@
 
 </main>
 
-<script src="assets/vendor/gsap.min.js?v=20261102b"></script>
-<script src="assets/vendor/ScrollTrigger.min.js?v=20261102b"></script>
-<script src="assets/vendor/lenis.min.js?v=20261102b"></script>
-<script src="assets/js/dims.js?v=20261102b"></script>
-<script src="assets/js/data.js?v=20261102b"></script>
-<script src="assets/js/core.js?v=20261102b"></script>
-<script src="assets/js/lightbox.js?v=20261102b"></script>
-<script src="assets/js/modules/compare.js?v=20261102b"></script>
-<script src="assets/js/hero-layers.js?v=20261102b"></script>
-<script src="assets/js/hero.js?v=20261102b"></script>
-<script src="assets/js/home.js?v=20261102b"></script>
+<script src="assets/vendor/gsap.min.js?v=20261106b"></script>
+<script src="assets/vendor/ScrollTrigger.min.js?v=20261106b"></script>
+<script src="assets/vendor/lenis.min.js?v=20261106b"></script>
+<script src="assets/js/cms-config.js?v=20261106b"></script>
+<script src="assets/js/dims.js?v=20261106b"></script>
+<script src="assets/js/data.js?v=20261106b"></script>
+<script src="assets/js/core.js?v=20261106b"></script>
+<script src="assets/js/cms.js?v=20261106b"></script>
+<script src="assets/js/lightbox.js?v=20261106b"></script>
+<script src="assets/js/modules/compare.js?v=20261106b"></script>
+<script src="assets/js/hero-layers.js?v=20261106b"></script>
+<script src="assets/js/hero.js?v=20261106b"></script>
+<script src="assets/js/home.js?v=20261106b"></script>
 </body>
 </html>

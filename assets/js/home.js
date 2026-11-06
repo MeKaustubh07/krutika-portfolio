@@ -196,6 +196,13 @@
     const pr = $("[data-about-practices]");
     if (pr && HOME.practices) pr.innerHTML = HOME.practices.map((p) =>
       `<li><span class="practices__name">${p.name}</span><i aria-hidden="true"></i><span class="label">${p.place}</span></li>`).join("");
+
+    /* the self-drawing axonometric beside the lists lives in about-axo.js (guarded against a second load) */
+    if ($("[data-axo]") && !$('script[src*="about-axo.js"]')) {
+      const s = document.createElement("script");
+      s.src = "assets/js/about-axo.js?v=20261106b"; s.async = true;
+      document.body.appendChild(s);
+    }
   }
 
   /* ---------- contact ---------- */
@@ -392,31 +399,39 @@
 
   /* ---------- boot ---------- */
 
-  safe("work", renderWork);
-  safe("drawings", renderDrawings);
-  safe("about", renderAbout);
-  safe("contact", renderContact);
-  safe("ground", renderGround);
-
-  const start = () => safe("stack", stackMotion);
-  if (typeof V.ready === "function") safe("ready", () => V.ready(start));
-  else if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });
-  else start();
-
-  if (V.reveal && typeof V.reveal.scan === "function") {
-    safe("reveal", () => ["#work", "#drawings", "#about", "#contact"].forEach((s) => {
-      const r = $(s); if (r) V.reveal.scan(r);
-    }));
-  }
-
   /* lazy images change layout height under Lenis — refresh triggers (debounced) as they land */
   let refreshT = 0;
   const refresh = () => {
     clearTimeout(refreshT);
     refreshT = setTimeout(() => { if (window.ScrollTrigger) safe("refresh", () => window.ScrollTrigger.refresh()); }, 250);
   };
+  const scan = (sels) => {
+    if (V.reveal && typeof V.reveal.scan === "function") safe("reveal", () => sels.forEach((s) => { const r = $(s); if (r) V.reveal.scan(r); }));
+    $$(sels.map((s) => `${s} img`).join(", ")).forEach((im) => { if (!im.complete) im.addEventListener("load", refresh, { once: true }); });
+  };
+
+  safe("about", renderAbout);
+  safe("contact", renderContact);
+  safe("ground", renderGround);
+  scan(["#about", "#contact"]);
   window.addEventListener("load", refresh, { once: true });
-  $$("#work img, #about img").forEach((im) => { if (!im.complete) im.addEventListener("load", refresh, { once: true }); });
+
+  /* work + drawings render from the merged list (data.js + published Sanity projects) */
+  const start = () => safe("stack", stackMotion);
+  const work = () => {
+    safe("work", renderWork);
+    safe("drawings", renderDrawings);
+    safe("featured", () => {   /* "Projects featured here" follows the real count */
+      const st = $$("[data-about-stats] .stat").find((s) => /featured/i.test(s.textContent));
+      const n = st && $("[data-count]", st);
+      if (n && +n.dataset.count !== PROJECTS.length) { n.dataset.count = PROJECTS.length; if (!n.__ct) n.textContent = PROJECTS.length; }
+    });
+    scan(["#work", "#drawings"]);
+    if (typeof V.ready === "function") safe("ready", () => V.ready(start));
+    else if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });
+    else start();
+  };
+  if (typeof V.afterCms === "function") V.afterCms(work); else work();
 
   failsafe();
   window.addEventListener("load", () => setTimeout(failsafe, 1200), { once: true });

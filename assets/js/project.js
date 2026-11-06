@@ -4,7 +4,7 @@
    step-through, pinned strip, legend, chapter rail, next link.
    ============================================================ */
 
-(function () {
+(function (boot) { const V = window.VERVE || {}; if (V.afterCms) V.afterCms(boot); else boot(); })(function () {   /* after the CMS merge */
   "use strict";
   const V = (window.VERVE = window.VERVE || {});
   const $ = (s, c = document) => c.querySelector(s);
@@ -198,14 +198,14 @@
           <p class="lede pj-lede" data-reveal="up" data-reveal-delay=".25">${P.lede}</p>
           <div class="tblock" data-reveal="up" data-reveal-delay=".35">
             <div class="tblock__ref" aria-hidden="true"><span class="tblock__bubble"><b>${P.no}</b><i>${pad(LIST.length)}</i></span><span class="label">Sheet</span></div>
-            <dl class="tblock__cells">${meta.map(([l, v]) => `<div class="tblock__cell"><dt class="label">${l}</dt><dd>${v}</dd></div>`).join("")}</dl>
+            <dl class="tblock__cells">${meta.filter(([, v]) => text(v).trim()).map(([l, v]) => `<div class="tblock__cell"><dt class="label">${l}</dt><dd>${v}</dd></div>`).join("")}</dl>
           </div>
         </div>
       </header>
 
       <figure class="pj-cover" style="--ar:${(cw / ch).toFixed(4)}" data-reveal="clip" data-lb-group="${P.id}" data-lb-index="${INDEX[BAN] != null ? INDEX[BAN] : INDEX[P.cover]}" tabindex="0" role="button"
-        aria-label="Open ${esc(P.name)} cover at full size" data-cursor="zoom">
-        <div class="pj-cover__px"><img class="pj-cover__img" src="${img("web", BAN)}" width="${cw}" height="${ch}" decoding="async" fetchpriority="high" alt="${esc(P.name + " — " + text(P.lede))}"></div>
+        aria-label="Open ${esc(text(P.name))} cover at full size" data-cursor="zoom">
+        <div class="pj-cover__px"><img class="pj-cover__img" src="${img("web", BAN)}" width="${cw}" height="${ch}" decoding="async" fetchpriority="high" alt="${esc(text(P.name) + " — " + text(P.lede))}"></div>
       </figure>
 
       <div class="pj-main wrap">
@@ -465,9 +465,9 @@
 
   /* ---------- boot ---------- */
 
-  document.title = `${P.name} — Verve`;
+  document.title = `${text(P.name)} — Verve`;
   const md = $('meta[name="description"]');
-  if (md) md.setAttribute("content", `${P.name} — ${text(P.lede)} Architectural illustration by Ar. Krutika M Patange.`);
+  if (md) md.setAttribute("content", `${text(P.name)} — ${text(P.lede)} Architectural illustration by Ar. Krutika M Patange.`);
   document.body.style.setProperty("--accent", P.accent || "");
   document.body.dataset.project = P.id;
 
@@ -496,4 +496,4 @@
       if (Math.abs(h - lastH) > 2) { lastH = h; clearTimeout(rt); rt = setTimeout(refresh, 200); }
     }).observe(root);
   }
-})();
+});

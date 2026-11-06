@@ -5,3 +5,10 @@ originals/
 .claude/
 .DS_Store
 .vercel/
+
+# Sanity Studio (content dashboard)
+studio/node_modules/
+studio/dist/
+studio/.sanity/
+studio/.env*
+!studio/.env.example

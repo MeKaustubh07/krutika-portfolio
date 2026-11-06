@@ -20,7 +20,7 @@
   root.classList.add("js");
 
   V.reduced = reduced; V.isTouch = isTouch;
-  V.img = (tier, slug) => `assets/img/${tier}/${slug}.jpg`;
+  V.img = (tier, slug) => (/^https:\/\/cdn\.sanity\.io\//.test(slug) ? `${slug}?w=${{ full: 2800, web: 1500, thumb: 700 }[tier] || 1500}&fit=max&auto=format&q=82` : `assets/img/${tier}/${slug}.jpg`);   /* Sanity: absolute CDN URL */
   V.dim = (slug) => (window.DIMS && window.DIMS[slug]) || [1600, 1100];
 
   const nav = $("[data-nav]"), wipe = $("[data-wipe]"), menu = $("[data-menu]"), menuBtn = $("[data-menu-toggle]");
@@ -323,7 +323,7 @@
             ${H.instagram ? `<a class="label menu__ig" href="https://instagram.com/${H.instagram}" target="_blank" rel="noopener">Instagram — @${H.instagram}</a>` : ""}
           </div></div>
       </div>`;
-    menu.addEventListener("click", (e) => { if (!e.target.closest("a, button, .menu__list li")) closeMenu(); });
+    if (!menu.__wired) { menu.__wired = 1; menu.addEventListener("click", (e) => { if (!e.target.closest("a, button, .menu__list li")) closeMenu(); }); }
   }
   const focusables = (r) => $$("a[href], button:not([disabled]), [tabindex]:not([tabindex='-1'])", r).filter((f) => f.offsetParent !== null);
   function openMenu() {
@@ -474,7 +474,7 @@
 
   try {
     if (wipe && reduced) wipe.dataset.state = "gone";
-    buildMenu();
+    buildMenu(); domReady.then(() => V.cms && V.cms.then((r) => { if (r && r.changed) { buildMenu(); syncTheme(); } }));   /* rebuilt from the merged CMS list */
     syncTheme();
     navScroll();
     doc.addEventListener("click", (e) => {
@@ -486,7 +486,7 @@
     doc.addEventListener("focusin", (e) => { const r = e.target.closest && e.target.closest("[data-reveal]"); if (!r) return; if (r.__rv === 1) play(r); if (hasGsap) gsap.getTweensOf(r).forEach((t) => t.progress(1)); });   /* focused ⇒ shown now */
     const pre = $("[data-preload]");
     if (pre && body.dataset.page === "home" && !reduced && !seen()) runPreloader(pre);
-    else settle(reduced ? 600 : 2000).then(() => { fireReady(); wipeIn(); });
+    else settle(reduced ? 600 : 2000).then(() => V.cms).then(() => { fireReady(); wipeIn(); });   /* V.cms settles within its own timeout */
     domReady.then(() => scan(doc));
     if (!hasGsap && !("IntersectionObserver" in window)) revealAll();
   } catch (err) {

@@ -197,11 +197,11 @@
 }
 .about__portrait { grid-column: 1 / 6; max-width: 480px; }
 .about__portrait-frame {
-  position: relative; overflow: hidden; aspect-ratio: 720 / 1080;
+  position: relative; overflow: hidden; aspect-ratio: 900 / 1020;
   padding: clamp(8px, 1vw, 14px); background: var(--sheet);
   border: 1px solid var(--line); box-shadow: var(--shadow);
 }
-.about__portrait-frame img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+.about__portrait-frame img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
 .about__caption { display: flex; justify-content: space-between; gap: 1rem; margin-top: .8rem; flex-wrap: wrap; }
 .about__caption-r { color: var(--ink-3); }
 .about__text { grid-column: 7 / 13; padding-top: clamp(0rem, 4vw, 4rem); }
@@ -249,13 +249,37 @@
 .practices__name { font-family: var(--f-sans); font-size: .95rem; letter-spacing: 0; }
 .practices .label { color: var(--ink-3); }
 
-.artefact { grid-column: 10 / 13; position: relative; margin-top: -6rem; }
-.artefact__float { will-change: transform; }
-.artefact img {
-  width: 100%; max-width: 340px; margin-left: auto;
-  filter: drop-shadow(0 30px 30px rgba(60, 38, 30, .22));
-}
-html[data-theme="dusk"] .artefact img { filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .55)) brightness(.92); }
+/* exploded axonometric that draws itself (built by about-axo.js) */
+.axo { grid-column: 10 / 13; margin-top: -3.5rem; }
+.axo:not(.is-built) { visibility: hidden; }
+.axo__svg { display: block; width: 100%; max-width: 340px; height: auto; margin-left: auto; overflow: visible; }
+.axo__cap { display: block; max-width: 340px; margin: .4rem 0 0 auto; text-align: right; color: var(--ink-3); }
+.axo .f { stroke: none; }
+.axo .f-t, .axo .f-fl { fill: var(--paper-3); }
+.axo .f-l { fill: var(--paper); }
+.axo .f-r { fill: var(--paper-2); }
+.axo .f-in { fill: color-mix(in srgb, var(--paper-2) 82%, var(--ink)); }
+.axo .f-in2 { fill: color-mix(in srgb, var(--paper-2) 90%, var(--ink)); }
+.axo .f-cut { fill: color-mix(in srgb, var(--terra) 16%, var(--paper-3)); }
+.axo .hatch, .axo .hatch-t { fill: url(#axo-hatch); }
+.axo .hatch-ln { stroke: var(--terra); stroke-width: .55; }
+.axo .gl { fill: color-mix(in srgb, var(--sage) 85%, var(--paper-3)); }
+html[data-theme="dusk"] .axo .gl { fill: color-mix(in srgb, var(--glow) 70%, var(--paper)); }
+.axo .ln { fill: none; stroke: var(--ink); stroke-width: .6; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.axo .an, .axo .an-n circle, .axo .an-n path { fill: none; stroke: var(--ink-3); stroke-width: .5; }
+.axo .an-n path, .axo .an-bar, .axo .an-fill { fill: var(--ink-3); stroke: none; }
+.axo .an-cut { stroke: var(--terra); stroke-dasharray: 9 2.5 1.5 2.5; }
+.axo .an-tk { stroke: var(--ink); stroke-width: .8; }
+.axo .an-fill--t { fill: var(--terra); }
+.axo text { font-family: var(--f-mono); font-size: 9.5px; letter-spacing: .04em; fill: var(--ink-3); }
+.axo .an-t--t { fill: var(--terra); }
+.axo .gd { fill: none; stroke: var(--terra); stroke-width: .55; stroke-dasharray: 2 2.5; opacity: 0; }
+/* drawing in : strokes first, line by line, then the washes and annotations */
+.axo.is-armed .ln { stroke-dashoffset: 1; transition: stroke-dashoffset 1s var(--ease-io) calc(var(--i) * 12ms); }
+.axo.is-armed .f { opacity: 0; transition: opacity .9s ease calc(var(--i) * 12ms + .7s); }
+.axo.is-armed text, .axo.is-armed .an, .axo.is-armed .an-n, .axo.is-armed .an-bar, .axo.is-armed .an-fill { opacity: 0; transition: opacity .9s ease 1.8s; }
+.axo.is-drawn .ln { stroke-dashoffset: 0; }
+.axo.is-drawn .f, .axo.is-drawn text, .axo.is-drawn .an, .axo.is-drawn .an-n, .axo.is-drawn .an-bar, .axo.is-drawn .an-fill { opacity: 1; }
 
 @media (max-width: 1023px) {
   .about__portrait { grid-column: 1 / 7; }
@@ -264,16 +288,25 @@ html[data-theme="dusk"] .artefact img { filter: drop-shadow(0 30px 40px rgba(0, 
 @media (max-width: 1180px) {
   .about__col:first-child { grid-column: 1 / 13; }
   .about__col:nth-child(2) { grid-column: 1 / 8; }
-  .artefact { grid-column: 8 / 13; margin-top: 0; }
-  .artefact img { max-width: 300px; }
+  .axo { grid-column: 8 / 13; margin-top: 0; }
+  .axo__svg, .axo__cap { max-width: 300px; }
 }
 @media (max-width: 719px) {
-  .about__portrait, .about__text, .about__col:nth-child(2), .artefact { grid-column: 1 / -1; }
+  .about__portrait, .about__text, .about__col:nth-child(2), .axo { grid-column: 1 / -1; }
   .about__portrait { max-width: 340px; }
   .about__stats { grid-template-columns: 1fr 1fr 1fr; gap: .75rem; }
   .stat .label { font-size: .58rem; letter-spacing: .1em; }
   .caps { grid-template-columns: 1fr; }
-  .artefact { display: none; }
+  .axo__svg { width: auto; height: min(290px, 72vw); max-width: 100%; margin: 0 auto; }
+  .axo__cap { max-width: none; text-align: center; margin-right: auto; }
+  .axo text { font-size: 12px; }
+}
+/* phones: a small framed portrait with its caption beside it, not a full-width photo */
+@media (max-width: 600px) {
+  .about__grid { row-gap: 2rem; }
+  .about__portrait { display: grid; grid-template-columns: 46% minmax(0, 1fr); column-gap: 1rem; align-items: end; max-width: none; }
+  .about__portrait-frame { padding: 6px; }
+  .about__caption { flex-direction: column; justify-content: flex-end; gap: .4rem; margin-top: 0; padding-bottom: .25rem; }
 }
 
 /* ---------- contact ---------- */
