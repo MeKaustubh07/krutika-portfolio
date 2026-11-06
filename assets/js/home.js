@@ -1,10 +1,11 @@
 /* ============================================================
    VERVE v2 — home page
-   Renders the work cards, drawing marquee, about and contact
-   from window.PROJECTS / window.HOME. Work cards stack as you
-   scroll (sticky, transforms only). The contact band opens with a ground
-   line drawn like the cover's section cut, with trees and people
-   moving in the breeze. Degrades to a static page if core fails.
+   Renders the work plate, drawing marquee, about and contact
+   from window.PROJECTS / window.HOME. Work is a plate of equal
+   tiles with little figures (figures.js) perched on the frames.
+   The contact band opens with a ground line drawn like the
+   cover's section cut, with trees and people moving in the
+   breeze. Degrades to a static page if core fails.
    ============================================================ */
 (() => {
   "use strict";
@@ -22,48 +23,47 @@
   const attr = (s) => String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
   const safe = (name, fn) => { try { fn(); } catch (e) { console.warn(`[home] ${name}:`, e); } };
 
-  /* ---------- work : stacking project cards ---------- */
+  /* ---------- work : a plate of equal tiles, figures stepping out of the frames ---------- */
 
-  const SCALE = `<svg class="glyph-scale" viewBox="0 0 84 12" aria-hidden="true"><path d="M1 2 V10 H83 V2 M21.5 6 V10 M42 2 V10 M62.5 6 V10"/><path class="fill" d="M1 7 H21.5 V10 H1Z M42 7 H62.5 V10 H42Z"/></svg>`;
+  /* per tile (by index): figure, perch (% of the frame, + an optional CSS offset; xw = x from 640px up), facing,
+     entrance offset (ex/ey) and hover nudge (hx/hy) in figure heights. pace = walks to and fro */
+  const PERCH = [
+    [{ n: "sit", x: 81, y: 0, ey: -.35 }, { n: "walk", x: 9, y: 100, pace: 1.3, ex: -.5, hx: .1 }],
+    [{ n: "kid", x: 5, y: 0, ey: .25, hy: -.12 }, { n: "lean", x: 96.4, xw: 100.6, y: 100, flip: 1, ex: .3 }],
+    [{ n: "wave", x: 13, y: 0, ey: .3 }, { n: "look", x: 88, y: 100, flip: 1, ex: .35, hx: .05 }],
+    [{ n: "point", x: 3, y: 100, yo: ".1em", ex: -.45, hx: .06 }, { n: "dog", x: 64, y: 100, yo: ".1em", pace: .28, ex: .45 }],
+    [{ n: "dress", x: 86, y: 100, flip: 1, ex: .3 }, { n: "walk", x: 10, y: 0, pace: 1.1, ex: -.4, hx: .1 }]
+  ];
 
-  function panel(p, i, n) {
-    const [cw, ch] = dim(p.cover);
-    const thumbs = (p.thumbs || []).slice(0, 3);
-    const meta = [p.practice, p.place, p.year].filter(Boolean).join(" · ");
+  function figure(f, k) {
+    const F = V.figures, m = F && F.meta(f.n);
+    if (!m) return "";
+    const s = f.flip ? -1 : 1, em = (v) => `${((v || 0) * s).toFixed(2)}em`;
+    const vars = `--x:${f.x};--xw:${f.xw || f.x};--y:${f.y};--yo:${f.yo || "0px"};--w:${m.w};--h:${m.h};--ax:${m.ax};--ay:${m.ay};` +
+      `--ex:${em(f.ex)};--ey:${((f.ey || 0)).toFixed(2)}em;--hx:${em(f.hx)};--hy:${(f.hy || 0).toFixed(2)}em;--fd:${(.25 + k * .2).toFixed(2)}s` +
+      (f.pace ? `;--pace:${f.pace}em;--pd:${(f.pace * 7 + 2).toFixed(1)}s` : "");
+    return `<span class="fig fig--${f.n}${f.pace ? " fig--pace" : ""}${f.flip ? " is-flip" : ""}" style="${vars}">` +
+      `<span class="fig__flip"><span class="fig__move">${F.svg(f.n)}</span></span></span>`;
+  }
+
+  function tile(p, i) {
+    const slug = p.tile || p.banner || p.cover;
+    const [w, h] = dim(slug);
     const name = plain(p.name);
-    return `<article class="wpanel${ch > cw ? " wpanel--tall" : ""}" style="--accent:${attr(p.accent || "var(--terra)")};--i:${i}" data-id="${attr(p.id)}">
-      <a class="wpanel__card" href="project.html?p=${encodeURIComponent(p.id)}" data-cursor="view"
+    const meta = [p.place, p.year].filter(Boolean).join(" · ");
+    /* the hand-picked crop belongs to data.js's own tile drawing only */
+    const zoom = p.tile && +p.tileZoom >= 1 && +p.tileZoom <= 2 ? `;--tile-zoom:${+p.tileZoom}` : "";
+    const pos = p.tile && /^\d{1,3}(\.\d+)?% \d{1,3}(\.\d+)?%$/.test(p.tilePos || "") ? `;--tile-pos:${p.tilePos}` : "";
+    return `<article class="tile" style="--accent:${attr(p.accent || "var(--terra)")}${zoom}${pos}" data-id="${attr(p.id)}">
+      <a class="tile__link" href="project.html?p=${encodeURIComponent(p.id)}" data-cursor="view"
          aria-label="${attr(`${p.no} ${name} — ${plain(p.typology)}. View project`)}">
-        <div class="wpanel__info">
-          <div class="wpanel__top">
-            <span class="wpanel__no num">${p.no}<span class="wpanel__of"> / ${String(n).padStart(2, "0")}</span></span>
-            ${SCALE}
-          </div>
-          <h3 class="wpanel__name display">${p.name}</h3>
-          <p class="wpanel__meta label">${meta}</p>
-          ${p.typology ? `<p class="wpanel__typ">${p.typology}</p>` : ""}
-          <div class="wpanel__foot">
-            <ul class="wpanel__thumbs" aria-hidden="true">${thumbs.map((t, k) => {
-              const [tw, th] = dim(t);
-              return `<li data-thumb="${k}"><img src="${img("thumb", t)}" width="${tw}" height="${th}" alt="" loading="lazy" decoding="async"></li>`;
-            }).join("")}</ul>
-            <span class="wpanel__cta label">View project <span class="wpanel__arrow" aria-hidden="true">→</span></span>
-          </div>
+        <div class="tile__frame">
+          <div class="tile__win"><img src="${img("web", slug)}" width="${w}" height="${h}" alt="${attr(name)} — drawing"
+            ${i > 1 ? 'loading="lazy"' : ""} decoding="async"></div>
+          <span class="tile__figs" aria-hidden="true">${PERCH[i % PERCH.length].map(figure).join("")}</span>
         </div>
-        <div class="wpanel__media">
-          <div class="wpanel__frame">
-            <img class="wpanel__cover" src="${img("web", p.cover)}" width="${cw}" height="${ch}" alt="${attr(name)} — cover drawing"
-                 ${i ? 'loading="lazy"' : ""} decoding="async">
-            ${thumbs.map((t, k) => {
-              const [tw, th] = dim(t);
-              return `<img class="wpanel__alt" data-alt="${k}" data-src="${img("web", t)}" width="${tw}" height="${th}" alt="" decoding="async">`;
-            }).join("")}
-          </div>
-          <span class="wpanel__tick wpanel__tick--tl" aria-hidden="true"></span>
-          <span class="wpanel__tick wpanel__tick--br" aria-hidden="true"></span>
-          <span class="wpanel__stamp label" aria-hidden="true"><span>Sheet ${p.no}</span></span>
-        </div>
-        <span class="wpanel__shade" aria-hidden="true"></span>
+        <h3 class="tile__cap"><span class="tile__no">${p.no}</span> — ${p.name}</h3>
+        ${meta ? `<p class="tile__meta label">${meta}</p>` : ""}
       </a>
     </article>`;
   }
@@ -71,54 +71,24 @@
   function renderWork() {
     const list = $("[data-work-list]");
     if (!list || !PROJECTS.length) return;
-    list.innerHTML = PROJECTS.map((p, i) => panel(p, i, PROJECTS.length)).join("");
+    list.innerHTML = `<p class="plate__head" aria-hidden="true"><span>Selected work</span><span>Planche 01</span></p>
+      <div class="plate">${PROJECTS.map(tile).join("")}</div>`;
     const count = $("[data-work-count]");
     if (count) count.textContent = String(PROJECTS.length).padStart(2, "0");
-    $$(".wpanel", list).forEach(wireThumbs);
+    plateMotion($(".plate", list));
   }
 
-  /* hover a thumb → crossfade that drawing into the cover frame */
-  function wireThumbs(panelEl) {
-    const card = $(".wpanel__card", panelEl);
-    const alts = $$(".wpanel__alt", panelEl);
-    let primed = false;
-    const prime = () => {
-      if (primed) return;
-      primed = true;
-      alts.forEach((a) => { if (a.dataset.src) a.src = a.dataset.src; });
-    };
-    card.addEventListener("pointerenter", (e) => { if (e.pointerType !== "touch") prime(); });
-    card.addEventListener("focus", prime);
-    $$("[data-thumb]", panelEl).forEach((li) => {
-      const k = li.dataset.thumb;
-      li.addEventListener("pointerenter", (e) => {
-        if (e.pointerType === "touch") return;
-        prime();
-        alts.forEach((a) => a.classList.toggle("is-on", a.dataset.alt === k));
-        panelEl.classList.add("is-alt");
-      });
-      li.addEventListener("pointerleave", () => {
-        alts.forEach((a) => a.classList.remove("is-on"));
-        panelEl.classList.remove("is-alt");
-      });
-    });
-  }
-
-  /* sticky stacking: the previous card recedes (scale + dim) as the next slides over */
-  function stackMotion() {
-    if (!(window.gsap && window.ScrollTrigger) || isReduced()) return;
-    const { gsap, ScrollTrigger } = window;
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.matchMedia().add("(min-width: 1px)", () => {   /* desktop and phones */
-      const panels = $$(".wpanel");
-      panels.forEach((p, i) => {
-        const next = panels[i + 1];
-        if (!next) return;
-        gsap.timeline({ scrollTrigger: { trigger: next, start: "top bottom", end: "top top+=120", scrub: true } })
-          .to($(".wpanel__card", p), { scale: 0.94, ease: "none" }, 0)
-          .to($(".wpanel__shade", p), { opacity: 0.55, ease: "none" }, 0);
-      });
-    });
+  /* figures step onto their perch as each tile arrives; idle loops run only while it is on screen */
+  function plateMotion(plate) {
+    if (!plate || !("IntersectionObserver" in window)) return;
+    const tiles = $$(".tile", plate);
+    if (isReduced()) { tiles.forEach((t) => t.classList.add("is-in")); return; }
+    plate.classList.add("is-armed");
+    const io = new IntersectionObserver((ents) => ents.forEach((e) => {
+      e.target.classList.toggle("is-live", e.isIntersecting);
+      if (e.isIntersecting && e.intersectionRatio > .25) e.target.classList.add("is-in");
+    }), { threshold: [0, .25, .5] });
+    tiles.forEach((t) => io.observe(t));
   }
 
   /* ---------- drawings (two-row marquee) ---------- */
@@ -417,7 +387,6 @@
   window.addEventListener("load", refresh, { once: true });
 
   /* work + drawings render from the merged list (data.js + published Sanity projects) */
-  const start = () => safe("stack", stackMotion);
   const work = () => {
     safe("work", renderWork);
     safe("drawings", renderDrawings);
@@ -427,9 +396,6 @@
       if (n && +n.dataset.count !== PROJECTS.length) { n.dataset.count = PROJECTS.length; if (!n.__ct) n.textContent = PROJECTS.length; }
     });
     scan(["#work", "#drawings"]);
-    if (typeof V.ready === "function") safe("ready", () => V.ready(start));
-    else if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start, { once: true });
-    else start();
   };
   if (typeof V.afterCms === "function") V.afterCms(work); else work();
 

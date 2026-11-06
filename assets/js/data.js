@@ -17,6 +17,7 @@ var PROJECTS = [
     role: "Illustration, plans, sections, exploded axonometric",
     cover: "mitra-sectional-perspective",
     banner: "mitra-front-elevation",   /* project-page header: landscape, shown uncropped */
+    tile: "mitra-front-elevation", tileZoom: 1.3, tilePos: "25% 13%",   /* home tile: crop the sheet border + title strip */
     thumbs: ["mitra-front-elevation", "mitra-plan-ground", "mitra-massing-6"],
     accent: "#7b82b8",
     lede: "A traditional Wada house drawn around its courtyard — the heart of everyday life.",
@@ -69,6 +70,7 @@ var PROJECTS = [
     role: "Masterplan graphics, sectional perspectives, unit &amp; clubhouse documentation",
     cover: "tulip-sectional-perspective",
     banner: "tulip-sectional-perspective",   /* project-page header: landscape, shown uncropped */
+    tile: "tulip-sectional-perspective",   /* home tile: one 1.41:1 illustration per project */
     thumbs: ["tulip-site-plan", "tulip-unit-elevation", "tulip-clubhouse-exploded"],
     accent: "#d8792b",
     lede: "Two villa typologies, east and west facing, drawn as a study in orientation and light.",
@@ -116,6 +118,7 @@ var PROJECTS = [
     role: "Illustration, documentation, construction details",
     cover: "anthill-sectional-perspective",
     banner: "anthill-context-axo",   /* project-page header: landscape, shown uncropped */
+    tile: "anthill-context-axo", tileZoom: 1.06, tilePos: "50% 50%",   /* crop the drawn border */
     thumbs: ["anthill-elevation", "anthill-context-axo", "anthill-brick-detail"],
     accent: "#b4593a",
     lede: "Exposed brick drawn as craft — arches, jali walls and courses, course by course.",
@@ -160,6 +163,7 @@ var PROJECTS = [
     role: "Visualization — renders, axonometric, plan &amp; section",
     cover: "fortress-hero",
     banner: "fortress-hero",   /* project-page header: landscape, shown uncropped */
+    tile: "fortress-axo",
     thumbs: ["fortress-axo", "fortress-section", "fortress-interior-kitchen"],
     accent: "#8a8f96",
     lede: "A raw concrete monolith, carved open for light, landscape and life.",

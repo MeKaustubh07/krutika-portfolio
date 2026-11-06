@@ -125,12 +125,12 @@ export const project = defineType({
     /* ---------- images ---------- */
     defineField({
       name: 'cover',
-      title: 'Cover image — shown on the home page card',
+      title: 'Cover image — the project\'s main drawing',
       description: 'The main drawing for this project. Also used in the menu and drawings strip.',
       type: 'image',
       group: 'images',
       options: {hotspot: true},
-      validation: (rule) => rule.required().error('A cover image is needed for the home page card.'),
+      validation: (rule) => rule.required().error('A cover image is needed for this project.'),
     }),
     defineField({
       name: 'banner',
@@ -141,9 +141,18 @@ export const project = defineType({
       options: {hotspot: true},
     }),
     defineField({
+      name: 'tile',
+      title: 'Home page tile',
+      description: 'Home page tile — a landscape illustration, shown at 1.41:1 like the others. Set the hotspot to choose what stays in frame. Leave empty to use the banner, then the cover.',
+      type: 'image',
+      group: 'images',
+      options: {hotspot: true},
+    }),
+    defineField({
       name: 'thumbs',
-      title: 'Small previews on the card',
-      description: 'Up to 3 extra drawings shown small on the home page card.',
+      title: 'Small previews (not shown on the site at the moment)',
+      description: 'Kept for older entries — the home page tiles no longer show these.',
+      hidden: true,
       type: 'array',
       group: 'images',
       of: [defineArrayMember({type: 'image', options: {hotspot: true}})],

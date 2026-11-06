@@ -137,6 +137,7 @@ async function toDoc(p, i) {
     intro: texts(p.intro),
     cover: await imageRef(p.cover),
     banner: p.banner ? await imageRef(p.banner) : undefined,
+    tile: p.tile ? await imageRef(p.tile) : undefined,
     thumbs: thumbs.slice(0, 3),
     blocks,
   })

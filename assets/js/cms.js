@@ -97,6 +97,13 @@
     const name = str(d.title), cover = image(d.cover);
     if (!name || !cover) return null;
     const p = { id: d.id, name, cover, banner: image(d.banner) || cover };
+    /* home tile: its own drawing (focus from the hotspot), else the page shows banner → cover */
+    const tile = image(d.tile);
+    if (tile) {
+      const h = d.tile.hotspot, ok = (v) => typeof v === "number" && v >= 0 && v <= 1;
+      p.tile = tile; p.tileZoom = undefined;
+      p.tilePos = h && ok(h.x) && ok(h.y) ? `${Math.round(h.x * 100)}% ${Math.round(h.y * 100)}%` : undefined;
+    }
     ["practice", "place", "year", "typology", "role", "lede"].forEach((k) => (p[k] = str(d[k])));
     if (typeof d.accent === "string" && /^#[0-9a-fA-F]{6}$/.test(d.accent)) p.accent = d.accent;
     p.thumbs = list(d.thumbs).map(image).filter(Boolean).slice(0, 3);
@@ -135,10 +142,11 @@
   /* ---------- fetch (GROQ over the HTTP query API) ---------- */
 
   const IMG = `{ "url": asset->url, "w": asset->metadata.dimensions.width, "h": asset->metadata.dimensions.height }`;
+  const TILE = IMG.replace(/ }$/, ", hotspot }");
   const DRAW = `{ title, note, tab, portrait, "image": image${IMG} }`;
   const GROQ = `*[_type == "project" && !(_id in path("drafts.**")) && defined(slug.current)] | order(order asc) {
     "id": slug.current, title, order, practice, place, year, typology, role, accent, lede, intro,
-    "cover": cover${IMG}, "banner": banner${IMG}, "thumbs": thumbs[]${IMG},
+    "cover": cover${IMG}, "banner": banner${IMG}, "tile": tile${TILE}, "thumbs": thumbs[]${IMG},
     "blocks": blocks[]{ _type, kicker, title, body, label, cols, caption, items,
       "drawing": drawing${DRAW}, "drawings": drawings[]${DRAW}, "a": a${DRAW}, "b": b${DRAW} }
   }`;
