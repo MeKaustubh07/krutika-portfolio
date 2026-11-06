@@ -218,7 +218,7 @@
 .scroll-cue {
   position: absolute;
   right: clamp(1rem, 3vw, 2.5rem);
-  bottom: clamp(1rem, 3vh, 2rem);
+  top: calc(min(100svh, 100%) - clamp(1rem, 3vh, 2rem) - 2.6rem);   /* bottom of the first screen, even when the hero is taller */
   z-index: 20;
   display: grid;
   place-items: center;
@@ -252,6 +252,12 @@
   100% { transform: translateY(7px); opacity: 0; }
 }
 .reduced .scroll-cue__mouse i { animation: none; opacity: 1; }
+
+/* landscape screens: the hero is as tall as the whole illustration at full width
+   (never shorter than the screen), so the earth band at its foot is never cut off */
+@media (min-aspect-ratio: 5/4) {
+  .hero { height: auto; aspect-ratio: 1561 / 1081; }
+}
 
 /* portrait / narrow screens: show the WHOLE illustration (fit width) with a band of
    sky above for the nav, instead of a full-height zoomed crop */

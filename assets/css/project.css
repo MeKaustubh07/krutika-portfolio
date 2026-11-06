@@ -49,7 +49,7 @@ body[data-page="project"] {
   font-variation-settings: "SOFT" 100, "WONK" 1;
   color: var(--accent-ink); letter-spacing: 0;
 }
-.pj-name__txt { padding-bottom: .06em; min-width: 0; }
+.pj-name__txt { flex: 1 1 0; padding-bottom: .06em; min-width: 0; }   /* fill the row, so short words never break */
 /* long single words from the CMS wrap instead of widening the page */
 .pj-name__txt, .pj-name__txt .sw, .pj-name__txt .sw__i, .pj-text__title, .pj-text__title .sw, .pj-text__title .sw__i,
 .pj-rail__title, .pj-next__name, .pj-next__name .sw, .pj-next__name .sw__i { overflow-wrap: anywhere; hyphens: auto; }

@@ -234,7 +234,7 @@
     const visW = Wv / s, visH = Hv / s;
     const X = visW < AW ? clamp((F.focus[0] + F.focus[1]) / 2 - visW / 2, 0, AW - visW) : 0;
     let T;
-    if (visH >= AH) T = -(visH - AH) * F.extSky;
+    if (visH >= AH - 2) T = -Math.max(0, visH - AH) * F.extSky;   // whole art in view (hero sized to it)
     else {
       const cap = Math.max(0, F.crownTop - F.skyGap / s), floor = F.feet - visH;   // sky above the crowns / feet in view
       T = clamp(floor > cap ? cap : clamp(cap * 0.45, floor, cap), 0, AH - visH);

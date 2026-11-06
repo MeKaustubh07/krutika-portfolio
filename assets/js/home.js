@@ -152,13 +152,6 @@
         : "");
     }
 
-    const stats = $("[data-about-stats]");
-    if (stats && HOME.stats) stats.innerHTML = HOME.stats.map((s, i) =>
-      `<div class="stat" data-reveal="up" data-reveal-delay="${(i * 0.1).toFixed(2)}">
-        <dt class="label">${s.label}</dt>
-        <dd class="stat__n display"><span data-count="${s.n}"${s.suffix ? ` data-count-suffix="${attr(s.suffix)}"` : ""}>${s.n}${s.suffix || ""}</span></dd>
-      </div>`).join("");
-
     const caps = $("[data-about-caps]");
     if (caps && HOME.capabilities) caps.innerHTML = HOME.capabilities.map((c, i) =>
       `<li><span>${c}</span><i aria-hidden="true"></i><span class="num">${String(i + 1).padStart(2, "0")}</span></li>`).join("");
@@ -390,11 +383,6 @@
   const work = () => {
     safe("work", renderWork);
     safe("drawings", renderDrawings);
-    safe("featured", () => {   /* "Projects featured here" follows the real count */
-      const st = $$("[data-about-stats] .stat").find((s) => /featured/i.test(s.textContent));
-      const n = st && $("[data-count]", st);
-      if (n && +n.dataset.count !== PROJECTS.length) { n.dataset.count = PROJECTS.length; if (!n.__ct) n.textContent = PROJECTS.length; }
-    });
     scan(["#work", "#drawings"]);
   };
   if (typeof V.afterCms === "function") V.afterCms(work); else work();

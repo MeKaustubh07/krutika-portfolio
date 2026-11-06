@@ -156,7 +156,7 @@ var PROJECTS = [
     id: "fortress",
     no: "04",
     name: "The Fortress",
-    practice: "Akar Design Studio",
+    practice: "Aakar Group of Consultancy",
     place: "Jaisingpur, Maharashtra",
     year: "2026",
     typology: "Residence · board-formed concrete",
@@ -220,16 +220,10 @@ var HOME = {
     "With a strong foundation in architectural design and proficiency in industry-standard visualization tools, I enjoy creating atmospheric renders, illustrative drawings, exploded diagrams, and presentation graphics that bring architecture to life.",
     "I am continually exploring new workflows and visual techniques to produce illustrations that are both technically accurate and emotionally engaging, bridging the gap between architecture and visual communication."
   ],
-  stats: [
-    { n: 20, suffix: "+", label: "Projects in six months" },
-    { n: 4, suffix: "", label: "Projects featured here" },
-    { n: 47, suffix: "", label: "Drawings in this folio" }
-  ],
   capabilities: ["Architectural illustration", "Sectional perspectives", "Exploded axonometrics", "Atmospheric renders",
                  "Post-production", "Presentation graphics", "Construction details", "Facade animation"],
   practices: [
     { name: "Aakar Group of Consultancy", place: "Sangli" },
-    { name: "Akar Design Studio", place: "Sangli" },
     { name: "College Architecture", place: "Bengaluru" },
     { name: "Kaushal Tatiya Architects", place: "Pune" }
   ],

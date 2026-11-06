@@ -56,24 +56,13 @@
 }
 .preload.is-out { transform: translate3d(0, -100%, 0); }
 .preload__inner { position: relative; display: grid; justify-items: center; }
-.preload__word {
-  font-family: var(--f-display);
-  font-size: clamp(5.5rem, 19vw, 16rem);
-  font-weight: 300;
-  font-style: italic;
-  font-variation-settings: "SOFT" 100, "WONK" 1;
-  letter-spacing: -.045em;
-  line-height: .9;
-}
-.preload__word .sw { padding-inline: .03em .09em; }
-.preload__word .sw__i {
-  transform: translate3d(0, 108%, 0) rotate(4deg);
-  clip-path: inset(0 100% 0 0);
-  transition: transform 1s var(--ease-out), clip-path 1.1s var(--ease-io);
-  transition-delay: calc(.15s + var(--ci, 0) * .13s);
-}
-.preload.is-on .preload__word .sw__i { transform: none; clip-path: inset(0 -10% 0 0); }
-.preload.is-out .preload__word .sw__i { transform: translate3d(0, -108%, 0); transition: transform .8s var(--ease-io) calc(var(--ci, 0) * .04s); }
+.preload__mark { display: block; line-height: 0; }
+/* the same mark as the nav, drawn large and a touch slower */
+.preload .logo--big { width: clamp(10rem, 34vw, 18rem); }
+.logo--big .logo__tri  { animation-duration: 1.4s; }
+.logo--big .logo__head { animation-delay: .95s, 2.4s; }
+.logo--big .logo__dot  { animation-delay: 1.35s; }
+.preload.is-out .preload__mark { transform: translate3d(0, -40%, 0); opacity: 0; transition: transform .8s var(--ease-io), opacity .6s; }
 .preload__count {
   position: absolute;
   right: 0;
@@ -178,16 +167,24 @@ html.has-cursor :is(input, textarea, select, [contenteditable="true"]) { cursor:
 .nav--menu::before { opacity: 0; }
 .nav .label { color: inherit; }
 
-.nav__brand {
-  margin-right: auto;
-  font-family: var(--f-display);
-  font-size: 1.7rem;
-  font-weight: 400;
-  font-variation-settings: "SOFT" 100, "WONK" 1;
-  letter-spacing: -.04em;
-  line-height: 1;
-}
-.nav__brand span { color: var(--terra); }
+.nav__brand { margin-right: auto; display: block; line-height: 0; }
+/* the Verve mark: the figure (triangle + head) settles in, the head keeps a slow bob */
+.logo { display: block; width: 84px; height: auto; overflow: visible; }
+.logo__tri  { transform-box: fill-box; transform-origin: 30% 100%; animation: logo-tri 1.1s var(--ease-out) .2s both; }
+.logo__head { transform-box: fill-box; transform-origin: 50% 100%; animation: logo-head .9s cubic-bezier(.3, 1.6, .5, 1) .75s both, logo-bob 5s ease-in-out 2s infinite; }
+.logo__ink  { animation: logo-fade .8s var(--ease-out) .1s both; }
+.logo__dot  { transform-box: fill-box; transform-origin: 50% 50%; animation: logo-pop .6s cubic-bezier(.3, 1.8, .5, 1) 1.1s both; }
+.nav__brand:hover .logo__head, .nav__brand:focus-visible .logo__head { animation: logo-hop .6s cubic-bezier(.3, 1.4, .5, 1); }
+.nav__brand:hover .logo__tri, .nav__brand:focus-visible .logo__tri { transform: rotate(-4deg); transition: transform .5s var(--ease-out); }
+.logo__tri { transition: transform .6s var(--ease-out); }
+@keyframes logo-tri  { from { transform: rotate(-14deg) scaleY(.4); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes logo-head { from { transform: translateY(-140%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes logo-bob  { 0%, 100% { transform: none; } 50% { transform: translateY(-9%); } }
+@keyframes logo-hop  { 0%, 100% { transform: none; } 40% { transform: translateY(-38%); } }
+@keyframes logo-fade { from { opacity: 0; transform: translateY(6%); } to { opacity: 1; transform: none; } }
+@keyframes logo-pop  { from { transform: scale(0); } to { transform: none; } }
+.reduced .logo *, .reduced .logo { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .logo * { animation: none !important; } }
 .nav__links { display: flex; gap: clamp(1.2rem, 2.6vw, 2.4rem); }
 .nav__links a { position: relative; padding-block: .4em; }
 .nav__links a::after {
@@ -247,7 +244,7 @@ html[data-daypart="morning"] .nav__theme-icon { background-size: 100% 1.5px; } h
 @media (max-width: 760px) {
   .nav__links, .nav .nav__theme-text { display: none; }
   .nav__theme { width: 38px; padding: 0; justify-content: center; }
-  .nav__brand { font-size: 1.45rem; }
+  .logo { width: 70px; }
 }
 
 /* ---------- menu overlay ---------- */
