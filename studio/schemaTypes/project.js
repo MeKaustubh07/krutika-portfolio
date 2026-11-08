@@ -27,26 +27,14 @@ export const project = defineType({
       validation: (rule) => rule.required().max(80).error('Please give the project a name.'),
     }),
     defineField({
+      /* the page link (project.html?p=…). Hidden: when empty the site makes it from the name;
+         the four imported projects keep theirs so old links never break */
       name: 'slug',
       title: 'Web address',
-      description:
-        'The project page link (project.html?p=…). Click "Generate" to make it from the name. Do not change it after publishing.',
       type: 'slug',
       group: 'basics',
-      options: {
-        source: 'title',
-        maxLength: 48,
-        /* the site only reads lowercase letters, numbers and dashes (see assets/js/cms.js) */
-        slugify: (input) =>
-          String(input || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 48).replace(/-+$/, ''),
-      },
-      validation: (rule) => [
-        rule.required().error('Click "Generate" to create the web address.'),
-        rule.custom((v) =>
-          !v || !v.current || /^[a-z0-9][a-z0-9-]{0,47}$/.test(v.current) ||
-          'Use lowercase letters, numbers and dashes only (e.g. "villa-no-5"), or the project will not show on the site.'),
-      ],
+      hidden: true,
+      options: {source: 'title', maxLength: 48},
     }),
     defineField({
       name: 'order',

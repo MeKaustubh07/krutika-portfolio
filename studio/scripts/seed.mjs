@@ -116,6 +116,16 @@ async function block(b) {
   }
 }
 
+/* data.js frames a tile with zoom + position; Sanity stores the same window as a crop (0–1 per side) */
+function tileCrop(p) {
+  const z = +p.tileZoom, m = String(p.tilePos || '').match(/^([\d.]+)% ([\d.]+)%$/)
+  if (!(z > 1) || !m) return {}
+  const v = 1 - 1 / z, r = (n) => Math.round(n * 1e4) / 1e4
+  const left = v * (+m[1] / 100), top = v * (+m[2] / 100)
+  return {crop: {_type: 'sanity.imageCrop', left: r(left), right: r(v - left), top: r(top), bottom: r(v - top)},
+    hotspot: {_type: 'sanity.imageHotspot', x: r(left + (1 - v) / 2), y: r(top + (1 - v) / 2), width: r(1 - v), height: r(1 - v)}}
+}
+
 async function toDoc(p, i) {
   const thumbs = []
   for (const t of p.thumbs || []) thumbs.push({_key: key(), ...(await imageRef(t))})
@@ -137,7 +147,7 @@ async function toDoc(p, i) {
     intro: texts(p.intro),
     cover: await imageRef(p.cover),
     banner: p.banner ? await imageRef(p.banner) : undefined,
-    tile: p.tile ? await imageRef(p.tile) : undefined,
+    tile: p.tile ? {...(await imageRef(p.tile)), ...tileCrop(p)} : undefined,
     thumbs: thumbs.slice(0, 3),
     blocks,
   })

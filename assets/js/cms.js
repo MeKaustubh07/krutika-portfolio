@@ -3,7 +3,8 @@
    Runs after data.js + core.js, before the page scripts. Sanity
    text is untrusted: every string is HTML-escaped here, so the
    page templates can treat it like data.js (already-safe HTML).
-   Not configured, slow or broken ⇒ data.js only, never blocked.
+   Sanity's published projects replace data.js's list; not configured,
+   empty, slow or broken ⇒ data.js only (offline fallback), never blocked.
    ============================================================ */
 (() => {
   "use strict";
@@ -92,17 +93,28 @@
   }
 
   /* a Sanity document → the data.js project shape, or null when unusable */
+  /* the page link: the saved web address, else made from the name (same rule as the Studio) */
+  const slugify = (t) => String(t || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48).replace(/-+$/, "");
+  const ID_RE = /^[a-z0-9][a-z0-9-]{0,95}$/;
+
   function project(d) {
-    if (!d || typeof d.id !== "string" || !/^[a-z0-9][a-z0-9-]{0,95}$/.test(d.id)) return null;
+    if (!d) return null;
+    const id = typeof d.slug === "string" && ID_RE.test(d.slug) ? d.slug : slugify(d.title);
+    if (!ID_RE.test(id)) return null;
     const name = str(d.title), cover = image(d.cover);
     if (!name || !cover) return null;
-    const p = { id: d.id, name, cover, banner: image(d.banner) || cover };
-    /* home tile: its own drawing (focus from the hotspot), else the page shows banner → cover */
+    const p = { id, name, cover, banner: image(d.banner) || cover };
+    /* home tile: its own drawing, framed by the Studio crop (→ zoom + position) or the hotspot */
     const tile = image(d.tile);
     if (tile) {
-      const h = d.tile.hotspot, ok = (v) => typeof v === "number" && v >= 0 && v <= 1;
-      p.tile = tile; p.tileZoom = undefined;
-      p.tilePos = h && ok(h.x) && ok(h.y) ? `${Math.round(h.x * 100)}% ${Math.round(h.y * 100)}%` : undefined;
+      const ok = (v) => typeof v === "number" && v >= 0 && v <= 1, c = d.tile.crop || {}, h = d.tile.hotspot;
+      p.tile = tile;
+      if ([c.left, c.right, c.top, c.bottom].every(ok) && c.left + c.right < 0.9 && c.top + c.bottom < 0.9) {
+        const sx = c.left + c.right, sy = c.top + c.bottom, at = (a, s) => (s > 0.001 ? Math.round((a / s) * 1000) / 10 : 50);
+        p.tileZoom = Math.min(2, Math.round((1 / (1 - Math.max(sx, sy))) * 1000) / 1000);
+        p.tilePos = `${at(c.left, sx)}% ${at(c.top, sy)}%`;
+      } else if (h && ok(h.x) && ok(h.y)) p.tilePos = `${Math.round(h.x * 100)}% ${Math.round(h.y * 100)}%`;
     }
     ["practice", "place", "year", "typology", "role", "lede"].forEach((k) => (p[k] = str(d[k])));
     if (typeof d.accent === "string" && /^#[0-9a-fA-F]{6}$/.test(d.accent)) p.accent = d.accent;
@@ -118,22 +130,18 @@
     return p;
   }
 
-  /* ---------- merge : same id replaces, others append, sort by order, renumber ---------- */
+  /* ---------- Sanity is the source: its published projects ARE the list (data.js is only the
+     offline fallback). Sorted by order, then publish order; numbers recomputed. ---------- */
 
   const FILL = { accent: "", practice: "", place: "", year: "", typology: "", role: "", lede: "", thumbs: [], intro: [], blocks: [] };
   function merge(docs) {
-    const out = LOCAL.map((p, i) => ({ ...p, order: typeof p.order === "number" ? p.order : i * 10 }));
-    const at = {};
-    out.forEach((p, i) => (at[p.id] = i));
-    let extra = 0;
-    docs.forEach((d) => {
+    const seen = new Set(), out = [];
+    docs.forEach((d, i) => {
       const p = project(d);
-      if (!p) return;
-      const i = at[p.id];
-      if (i != null) out[i] = { ...out[i], ...p };   /* a field left empty in Sanity keeps the built-in value */
-      else { at[p.id] = out.length; out.push({ ...FILL, order: 1e6 + extra++, ...p }); }
+      if (!p || seen.has(p.id)) return;
+      seen.add(p.id);
+      out.push({ ...FILL, order: 1e6 + i, ...p, __i: i });
     });
-    out.forEach((p, i) => (p.__i = i));
     out.sort((a, b) => a.order - b.order || a.__i - b.__i);
     out.forEach((p, i) => { delete p.__i; p.no = String(i + 1).padStart(2, "0"); });
     return out;
@@ -142,10 +150,10 @@
   /* ---------- fetch (GROQ over the HTTP query API) ---------- */
 
   const IMG = `{ "url": asset->url, "w": asset->metadata.dimensions.width, "h": asset->metadata.dimensions.height }`;
-  const TILE = IMG.replace(/ }$/, ", hotspot }");
+  const TILE = IMG.replace(/ }$/, ", hotspot, crop }");
   const DRAW = `{ title, note, tab, portrait, "image": image${IMG} }`;
-  const GROQ = `*[_type == "project" && !(_id in path("drafts.**")) && defined(slug.current)] | order(order asc) {
-    "id": slug.current, title, order, practice, place, year, typology, role, accent, lede, intro,
+  const GROQ = `*[_type == "project" && !(_id in path("drafts.**")) && defined(title)] | order(order asc, _createdAt asc) {
+    "slug": slug.current, title, order, practice, place, year, typology, role, accent, lede, intro,
     "cover": cover${IMG}, "banner": banner${IMG}, "tile": tile${TILE}, "thumbs": thumbs[]${IMG},
     "blocks": blocks[]{ _type, kicker, title, body, label, cols, caption, items,
       "drawing": drawing${DRAW}, "drawings": drawings[]${DRAW}, "a": a${DRAW}, "b": b${DRAW} }
@@ -170,6 +178,7 @@
         const docs = json && Array.isArray(json.result) ? json.result : null;
         if (!docs) return fallback("unexpected response");
         const merged = merge(docs);
+        if (!merged.length) return fallback("no published projects yet");
         LOCAL.splice(0, LOCAL.length, ...merged);   /* same array object: earlier references stay valid */
         finish({ source: "sanity", changed: true, count: docs.length });
       })
