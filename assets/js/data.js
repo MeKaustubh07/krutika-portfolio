@@ -216,7 +216,7 @@ var PROJECTS = [
 
 var HOME = {
   bio: [
-    "I am a <strong>2025 Bachelor of Architecture graduate</strong> with a passion for transforming architectural ideas into compelling visual narratives. My work focuses on architectural illustration, visualization, and digital storytelling, combining technical precision with an artistic approach to communicate design intent clearly and effectively.",
+    "I am an <strong>architect and architectural illustrator</strong> who translates design intent into clear, compelling visual narratives. My work spans architectural illustration, visualization, and digital storytelling, pairing technical precision with an artistic sensibility.",
     "With a strong foundation in architectural design and proficiency in industry-standard visualization tools, I enjoy creating atmospheric renders, illustrative drawings, exploded diagrams, and presentation graphics that bring architecture to life.",
     "I am continually exploring new workflows and visual techniques to produce illustrations that are both technically accurate and emotionally engaging, bridging the gap between architecture and visual communication."
   ],
