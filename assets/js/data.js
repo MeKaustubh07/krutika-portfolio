@@ -63,7 +63,7 @@ var PROJECTS = [
     id: "tulip",
     no: "02",
     name: "Royal Tulip Housing",
-    practice: "College Architecture",
+    practice: "Collage Architecture Studio",
     place: "Bengaluru, Karnataka",
     year: "2025",
     typology: "Villa township · 29-amenity masterplan",
@@ -220,12 +220,15 @@ var HOME = {
     "With a strong foundation in architectural design and proficiency in industry-standard visualization tools, I enjoy creating atmospheric renders, illustrative drawings, exploded diagrams, and presentation graphics that bring architecture to life.",
     "I am continually exploring new workflows and visual techniques to produce illustrations that are both technically accurate and emotionally engaging, bridging the gap between architecture and visual communication."
   ],
-  capabilities: ["Architectural illustration", "Sectional perspectives", "Exploded axonometrics", "Atmospheric renders",
-                 "Post-production", "Presentation graphics", "Construction details", "Facade animation"],
+  deliverables: ["Architectural illustration", "Atmospheric renders", "Sectional perspectives", "Process documentation",
+                 "Plans & sections", "Masterplan graphics", "Construction details", "Presentation graphics",
+                 "Visual documentation", "Post-production", "Facade animation", "Exploded axonometrics"],
   practices: [
-    { name: "Aakar Group of Consultancy", place: "Sangli" },
-    { name: "College Architecture", place: "Bengaluru" },
-    { name: "Kaushal Tatiya Architects", place: "Pune" }
+    { name: "Aakar Group of Consultancy", place: "Sangli", ig: "the.aakar_studio", logo: "aakar-group-of-consultancy", w: 345, h: 360 },
+    { name: "Kaushal Tatiya Architects", place: "Pune", ig: "kaushal_tatiya_architects", logo: "kaushal-tatiya-architects", w: 1398, h: 172 },
+    { name: "Collage Architecture Studio", place: "Bengaluru", ig: "collage_architecture_studio", logo: "collage-architecture-studio", w: 389, h: 325 },
+    { name: "Intraa Design Studio", place: "Pune", ig: "intraa_design_studio", logo: "intraa-design-studio", w: 508, h: 192 },
+    { name: "Alok Kothari Architects", place: "Pune", ig: "alokkothariarchitects", logo: "alok-kothari-architects", w: 1873, h: 239 }
   ],
   closing: [
     "This portfolio presents a curated selection of my architectural illustration work, representing only a fraction of the projects I have undertaken. Over the past six months, I have contributed to more than 20 architectural projects, collaborating closely with multiple architectural practices to produce illustrations, presentation graphics, and visual documentation across diverse scales and typologies.",

@@ -143,6 +143,29 @@
 
   /* ---------- about ---------- */
 
+  /* the practices: HOME.practices (with logos), plus any new practice named on a published project */
+  function renderPractices() {
+    const ul = $("[data-about-practices]");
+    if (!ul) return;
+    const key = (s) => String(s).trim().toLowerCase();
+    const all = (HOME.practices || []).map((p) => ({ ...p, works: [] }));
+    PROJECTS.forEach((p) => {
+      if (!p.practice) return;
+      let e = all.find((k) => key(k.name) === key(p.practice));
+      if (!e) all.push((e = { name: p.practice, place: String(p.place || "").split(",")[0], works: [] }));
+      e.works.push(p.name);
+    });
+    ul.innerHTML = all.map((p) => `<li class="practice">
+      <div class="practice__mark">${p.logo
+        ? `<img src="assets/img/practices/${p.logo}.png" width="${p.w}" height="${p.h}" alt="" loading="lazy" decoding="async">`
+        : `<span class="practice__word">${p.name}</span>`}</div>
+      <span class="practice__name"${p.logo ? "" : ' aria-hidden="true" hidden'}>${p.name}</span>
+      ${p.place ? `<span class="label practice__place">${p.place}</span>` : ""}
+      ${p.works.length ? `<span class="practice__works">${p.works.join(", ")}</span>` : ""}
+      ${p.ig ? `<a class="label practice__ig" href="https://www.instagram.com/${p.ig}/" target="_blank" rel="noopener" aria-label="${p.name} on Instagram" data-cursor="link">Instagram <span aria-hidden="true">↗</span></a>` : ""}
+    </li>`).join("");
+  }
+
   function renderAbout() {
     const bio = $("[data-about-bio]");
     if (bio && HOME.bio && HOME.bio.length) {
@@ -153,12 +176,10 @@
     }
 
     const caps = $("[data-about-caps]");
-    if (caps && HOME.capabilities) caps.innerHTML = HOME.capabilities.map((c, i) =>
+    if (caps && HOME.deliverables) caps.innerHTML = HOME.deliverables.map((c, i) =>
       `<li><span>${c}</span><i aria-hidden="true"></i><span class="num">${String(i + 1).padStart(2, "0")}</span></li>`).join("");
 
-    const pr = $("[data-about-practices]");
-    if (pr && HOME.practices) pr.innerHTML = HOME.practices.map((p) =>
-      `<li><span class="practices__name">${p.name}</span><i aria-hidden="true"></i><span class="label">${p.place}</span></li>`).join("");
+    renderPractices();
 
     /* the self-drawing axonometric beside the lists lives in about-axo.js (guarded against a second load) */
     if ($("[data-axo]") && !$('script[src*="about-axo.js"]')) {
@@ -381,9 +402,11 @@
 
   /* work + drawings render from the merged list (data.js + published Sanity projects) */
   const work = () => {
+    safe("practices", renderPractices);
     safe("work", renderWork);
     safe("drawings", renderDrawings);
     scan(["#work", "#drawings"]);
+    refresh();
   };
   if (typeof V.afterCms === "function") V.afterCms(work); else work();
 
